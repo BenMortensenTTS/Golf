@@ -1,0 +1,15 @@
+
+#wrapper{
+    max-width: 200px;
+    margin:0 auto;
+}
+
+#boxWrapper {
+    line-height: 0;
+}
+
+.boxStyling {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+}
