@@ -12,11 +12,16 @@ body {
   display: block;
   position: absolute;
   height: 100px;
-  width: 300px;
+  width: 70px;
   line-height: 100px;
-  margin: 20px;
+  margin: 30px;
   text-align: center;
   z-index: 1;
+}
+
+img {
+  height: 100px;
+  width: 70px; 
 }
 
 .item.muuri-item-dragging {
@@ -41,8 +46,8 @@ body {
 }
 
 .item.muuri-item-dragging .item-content{
-  background: #8993a2;
+  background: #477148;
 }
 .item.muuri-item-releasing .item-content{
-  background: #152c43;
+  background: #477148;
 }

@@ -5,14 +5,15 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      cardArray: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,
-    26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52],
+      cardArrayObj: [{id:0, img:"./images/00.jpg"}, {id:1, img:"./images/01.jpg"}, {id:2, img:"./images/02jpg"}, 
+      {id:3, img:"./images/03.jpg"}, {id:4,img:"./images/04.jpg"}, {id:5,img:"./images/05.jpg"}, {id:6, img:"./images/07.jpg"}, 
+      {id:8, img:"./images/08jpg"}, {id:9,img:"./images/09.jpg"}, {id:10,img:"./images/10.jpg"}, {id:11,img:"./images/11.jpg"}, 
+      {id:12,img:"./images/12.jpg"}, {id:13,img:"./images/13.jpg"}],
     discard: null,
     grabCardID: null,
     randomNumberState: null, //might not need this
     pickedCard: null,
-    playing: true
-
+    playing: true 
     }
   }
 
@@ -59,19 +60,44 @@ class App extends React.Component {
 
 
   render() {
+    let playingCard=(
+      <div id={this.state.cardArray[0].id}><img src={this.state.cardArray[0].img}/></div>
+    )
     return (
       <div>
-        <Button clickFunc={this.getRandNum} buttonName="Draw Deck"></Button>
-        <Button clickFunc={this.swapCards} buttonName="Swap" />
-        <Button clickFunc={this.startGame} buttonName="Start Game"/>
         <h1>{"Amount of cards left in deck: " + this.state.cardArray.length}</h1>
+        {playingCard}
       </div>
   );
   }
 }
+        // <Button clickFunc={this.getRandNum} buttonName="Draw Deck"></Button>
+        // <Button clickFunc={this.swapCards} buttonName="Swap" />
+        // <Button clickFunc={this.startGame} buttonName="Start Game"/>
 
 const Button = (props) => {
-  return <button onClick={()=>{props.clickFunc()}}>{props.buttonName}</button>
+
+// let cardImgArray = [];
+  // for(let i = 0; i < 12; i++) {
+  //   if(i % 3 === 0 ) {
+  //     for(let i = 0; i < 2; i++) {
+  //       cardImgArray[i] = (
+  //         <div id="wrapper">
+  //         </div>)
+  //     }
+  //   }
+  //   cardImgArray[i] = (
+  //     <div class="item">
+  //     <div class="item-content">
+  //       <img src="./images/00.jpg"/>
+  //     </div>
+  //   </div>)
+
+
+  
+  // return <button onClick={()=>{props.clickFunc()}}>{props.buttonName}</button>
 }
 
 export default App;
+
+
