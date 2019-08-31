@@ -8,7 +8,10 @@ class App extends React.Component {
       play1Hand: [],
       play2Hand: [],
       cardArray: [],
-      discard: {}
+      discard: {},
+      beginP1Flipped: 0,
+      beginP2Flipped: 0,
+      playing: false
     }
   }
 
@@ -67,7 +70,7 @@ class App extends React.Component {
       play1Hand: p1hand,
       play2Hand: p2hand,
       cardArray: deckImageArr,
-      discard: discardObj
+      discard: discardObj,
     })
   }
 
@@ -87,18 +90,22 @@ class App extends React.Component {
   }
 
   const player1Click = (item) => {
-    let targetImgPic = item.target.id % 13 === 0 ? 13 : item.target.id % 13
-    item.target.src=`./images/${targetImgPic}.jpg`
+    let cardsFlipped = this.state.beginP1Flipped + 1
+    if (cardsFlipped < 3 && this.state.playing === false) {
+      let targetImgPic = item.target.id % 13 === 0 ? 13 : item.target.id % 13
+      item.target.src=`./images/${targetImgPic}.jpg`
+      this.setState({beginP1Flipped: cardsFlipped})
+    }
   }
 
   const player2Click = (item) => {
-    let targetImgPic = item.target.id % 13 === 0 ? 13 : item.target.id % 13
-    item.target.src=`./images/${targetImgPic}.jpg`
+    let cardsFlipped = this.state.beginP2Flipped + 1
+    if (cardsFlipped < 3 && this.state.playing === false) {
+      let targetImgPic = item.target.id % 13 === 0 ? 13 : item.target.id % 13
+      item.target.src=`./images/${targetImgPic}.jpg`
+      this.setState({beginP2Flipped: cardsFlipped})
+    }
   }
-
-    console.log(this.state.play1Hand);
-    console.log(this.state.play2Hand);
-    console.log('cardArray',this.state.cardArray);
 
     let renderPlay1Hand = this.state.play1Hand.map((card1)=>{
       return <img onClick={player1Click} src={"./images/0.jpg"} id={card1.id} />
@@ -109,6 +116,8 @@ class App extends React.Component {
     })
 
     let deck = <img onClick={getCardFromDeck} src={"./images/0.jpg"} id={null} />
+    
+
     return (
       <div>
         <div>{renderPlay1Hand}</div>
