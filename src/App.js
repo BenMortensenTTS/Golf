@@ -51,22 +51,17 @@ class App extends React.Component {
       }
     })
 
-    console.log(deckImageArr);
-
     discardIndex = this.randCardIndex(deckImageArr);
     discardObj = deckImageArr.splice(discardIndex,1)[0];
 
     for(let i=0;i<12;i++){
       randNum = this.randCardIndex(deckImageArr);
-      console.log("randNum = " + randNum);
       
       let randCardObj = deckImageArr.splice(randNum,1)[0];
       if(i < 6){
         p1hand[i] = randCardObj;
-        console.log(p1hand[i])        
       } else {
         p2hand[i-6] = randCardObj;
-        console.log(p2hand[i-6])                
       }
     }
     this.setState({
@@ -94,16 +89,19 @@ class App extends React.Component {
   render() {
  
   const getCardFromDeck = (item) => {
-    let temp = this.state.cardArray
-    let card = temp.splice(this.randCardIndex(temp), 1)[0];
-    if(temp.length !== 0) { 
-      card = card.id % 13 === 0 ? 13 : card.id % 13
-      item.target.src = `./images/${card}.jpg`
+    if(this.state.playing) {
+      let temp = this.state.cardArray
+      let card = temp.splice(this.randCardIndex(temp), 1)[0];
+      if(temp.length !== 0) { 
+        card = card.id % 13 === 0 ? 13 : card.id % 13
+        item.target.src = `./images/${card}.jpg`
     }
-    this.setState({
-      cardArray: temp,
+      this.setState({
+        cardArray: temp,
 
-    })
+      })
+      return card;
+    }
   }
 
   const player1Click = (item) => {
@@ -127,14 +125,18 @@ class App extends React.Component {
   }
 
     let renderPlay1Hand = this.state.play1Hand.map((card1, index)=>{
-      return <img onClick={player1Click} src={"./images/0.jpg"} id={card1.id} className={index} />
+      return <img onClick={player1Click} src={"./images/0.jpg"} id={card1.id} className={index} key={index+10} alt="card" />
     })
 
     let renderPlay2Hand = this.state.play2Hand.map((card2, index)=>{
-      return <img onClick={player2Click} src={"./images/0.jpg"} id={card2.id} className={index} />
+      return <img onClick={player2Click} src={"./images/0.jpg"} id={card2.id} className={index} key={index+100} alt="card"/>
     })
 
-    let deck = <img onClick={getCardFromDeck} src={"./images/0.jpg"} id={null} />
+    let deck = <img onClick={getCardFromDeck} src={"./images/0.jpg"} id={null} alt="deck" />
+
+    let discard = <img src={this.state.discard.image} id={this.state.discard.id} alt="discard"/>
+
+    let cardsOrEnd = this.state.cardArray.length !== 0 ? <h3>{"Amount of cards left in deck: " + this.state.cardArray.length}</h3> : <h3>No more cards.</h3>
     
 
     return (
@@ -143,7 +145,8 @@ class App extends React.Component {
         <div>{renderPlay2Hand}</div>
 
         <span>Discard</span><span>Deck</span><div></div>
-        <span><img src={this.state.discard.image} id={this.state.discard.id}/></span><span>{deck}</span>
+        <span>{discard}</span><span>{deck}</span>
+        <div>{cardsOrEnd}</div>
         <Button clickFunc={this.startGame} buttonName="Start Game"/>
       </div>
     );
