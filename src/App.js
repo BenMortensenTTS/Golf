@@ -21,7 +21,7 @@ class App extends React.Component {
   }
 
   randCardIndex=(deckArr)=>{
-    return Math.floor(Math.random()*deckArr.length);
+    return Math.floor(Math.random()*deckArr.length)
   }
 
 
@@ -76,6 +76,15 @@ class App extends React.Component {
 
   render() {
  
+  const getCardFromDeck = (item) => {
+    let temp = this.state.cardArray
+    let card = temp.splice(this.randCardIndex(temp), 1)[0];
+    if(temp.length !== 0) { 
+      card = card.id % 13 === 0 ? 13 : card.id % 13
+      item.target.src = `./images/${card}.jpg`
+    }
+    this.setState({cardArray: temp})
+  }
 
   const player1Click = (item) => {
     let targetImgPic = item.target.id % 13 === 0 ? 13 : item.target.id % 13
@@ -98,12 +107,15 @@ class App extends React.Component {
     let renderPlay2Hand = this.state.play2Hand.map((card2)=>{
       return <img onClick={player2Click} src={"./images/0.jpg"} id={card2.id} />
     })
+
+    let deck = <img onClick={getCardFromDeck} src={"./images/0.jpg"} id={null} />
     return (
       <div>
         <div>{renderPlay1Hand}</div>
         <div>{renderPlay2Hand}</div>
-        <div>Discard</div>
-        <div><img src={this.state.discard.image} id={this.state.discard.id}/></div>
+
+        <span>Discard</span><span>Deck</span><div></div>
+        <span><img src={this.state.discard.image} id={this.state.discard.id}/></span><span>{deck}</span>
       </div>
     );
   }
