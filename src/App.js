@@ -48,9 +48,7 @@ class App extends React.Component {
     console.log(deckImageArr);
 
     discardIndex = this.randCardIndex(deckImageArr);
-    console.log('discardIndex',discardIndex);
     discardObj = deckImageArr.splice(discardIndex,1)[0];
-    console.log('discardObj',discardObj);
 
     for(let i=0;i<12;i++){
       randNum = this.randCardIndex(deckImageArr);
@@ -79,16 +77,18 @@ class App extends React.Component {
     console.log('cardArray',this.state.cardArray);
 
     let renderPlay1Hand = this.state.play1Hand.map((card1)=>{
-      return <img src={card1.image} id={card1.id} />
+      return <img src={"./images/0.jpg"} id={card1.id} />
     })
 
     let renderPlay2Hand = this.state.play2Hand.map((card2)=>{
-      return <img src={card2.image} id={card2.id} />
+      return <img src={"./images/0.jpg"} id={card2.id} />
     })
     return (
       <div>
         <div>{renderPlay1Hand}</div>
         <div>{renderPlay2Hand}</div>
+        <div>Discard</div>
+        <div><img src={this.state.discard.image} id={this.state.discard.id}/></div>
       </div>
     );
   }
@@ -115,6 +115,3 @@ export default App;
 //            <div>{renderPlay2Hand}</div>
 //          </div>
 //        </div>
-
-// <div>{renderPlay1Hand}</div>
-//         <div>{renderPlay2Hand}</div>
