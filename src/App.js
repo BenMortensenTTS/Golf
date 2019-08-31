@@ -27,7 +27,6 @@ class App extends React.Component {
 
   componentDidMount() {
     let deckIndexArr = this.genDeck();
-    let randCardIndex;
     let p1hand = [];
     let p2hand = [];
     let cardImageArr = [];
@@ -46,16 +45,24 @@ class App extends React.Component {
       }
     })
 
+    console.log(deckImageArr);
+
+    discardIndex = this.randCardIndex(deckImageArr);
+    console.log('discardIndex',discardIndex);
+    discardObj = deckImageArr.splice(discardIndex,1)[0];
+    console.log('discardObj',discardObj);
+
     for(let i=0;i<12;i++){
       randNum = this.randCardIndex(deckImageArr);
-      discardIndex = this.randCardIndex(deckImageArr);
-      discardObj = deckImageArr.splice(discardIndex,1)[0];
-
+      console.log("randNum = " + randNum);
+      
       let randCardObj = deckImageArr.splice(randNum,1)[0];
       if(i < 6){
         p1hand[i] = randCardObj;
+        console.log(p1hand[i])        
       } else {
         p2hand[i-6] = randCardObj;
+        console.log(p2hand[i-6])                
       }
     }
     this.setState({
@@ -67,26 +74,26 @@ class App extends React.Component {
   }
 
   render() {
-    let renderPlay1Hand = this.state.play1Hand.map((card)=>{
-      return <img src={card.image} id={card.id} />
+    console.log(this.state.play1Hand);
+    console.log(this.state.play2Hand);
+    console.log('cardArray',this.state.cardArray);
+
+    let renderPlay1Hand = this.state.play1Hand.map((card1)=>{
+      return <img src={card1.image} id={card1.id} />
+    })
+
+    let renderPlay2Hand = this.state.play2Hand.map((card2)=>{
+      return <img src={card2.image} id={card2.id} />
     })
     return (
-      <div>{renderPlay1Hand}</div>
+      <div>
+        <div>{renderPlay1Hand}</div>
+        <div>{renderPlay2Hand}</div>
+      </div>
     );
   }
 }
-      // <div id="mainDiv">
-      //   <h3>{"Amount of cards left in deck: " + this.state.cardArray.length}</h3>
-      //   <div> 
-      //     {player1Hand}
-      //     <h3>RandomText1</h3>
-      //     <Button clickFunc={this.getRandNum} buttonName="Draw Deck"></Button>
-      //     <Button clickFunc={this.swapCards} buttonName="Swap" />
-      //     <Button clickFunc={this.startGame} buttonName="Start Game"/>
-      //     <h3>RandomText2</h3>
-      //     {player2Hand}
-      //   </div>
-      // </div>   
+
 
 const Button = (props) => {
   
@@ -96,3 +103,18 @@ const Button = (props) => {
 export default App;
 
 
+// <div id="mainDiv">
+//         <h3>{"Amount of cards left in deck: " + this.state.cardArray.length}</h3>
+//          <div> 
+          // <div>{renderPlay1Hand}</div>
+//            <h3>RandomText1</h3>
+//            <Button clickFunc={this.getRandNum} buttonName="Draw Deck"></Button>
+//            <Button clickFunc={this.swapCards} buttonName="Swap" />
+//            <Button clickFunc={this.startGame} buttonName="Start Game"/>
+//            <h3>RandomText2</h3>
+//            <div>{renderPlay2Hand}</div>
+//          </div>
+//        </div>
+
+// <div>{renderPlay1Hand}</div>
+//         <div>{renderPlay2Hand}</div>
