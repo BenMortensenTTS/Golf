@@ -11,7 +11,9 @@ class App extends React.Component {
       discard: {},
       beginP1Flipped: 0,
       beginP2Flipped: 0,
-      playing: false
+      playing: false,
+      p1Turn: null,
+      p2Turn: null
     }
   }
 
@@ -44,7 +46,8 @@ class App extends React.Component {
       let imgIndex = (idNum%13)===0 ? 13 : idNum%13;
       return {
         id:idNum,
-        image: cardImageArr[imgIndex]
+        image: cardImageArr[imgIndex],
+        index: null
       }
     })
 
@@ -74,7 +77,18 @@ class App extends React.Component {
     })
   }
 
- 
+  startGame = () => {
+    if (this.state.beginP1Flipped === 2 && this.state.beginP2Flipped === 2 && this.state.playing === false) {
+      let turn = (Math.floor(Math.random() * 2)) === 0 ? true : false
+      this.setState({
+        p1Turn: turn,
+        p2Turn: !turn,
+        playing: true
+      }, ()=>{
+        this.state.p1Turn ? console.log("Player 1 goes first.") : console.log("Player 2 goes first.")
+      })
+    }
+  }
 
 
   render() {
@@ -86,12 +100,16 @@ class App extends React.Component {
       card = card.id % 13 === 0 ? 13 : card.id % 13
       item.target.src = `./images/${card}.jpg`
     }
-    this.setState({cardArray: temp})
+    this.setState({
+      cardArray: temp,
+
+    })
   }
 
   const player1Click = (item) => {
-    let cardsFlipped = this.state.beginP1Flipped + 1
-    if (cardsFlipped < 3 && this.state.playing === false) {
+    let cardsFlipped = this.state.beginP1Flipped
+    if (cardsFlipped < 2 && this.state.playing === false) {
+      cardsFlipped++;
       let targetImgPic = item.target.id % 13 === 0 ? 13 : item.target.id % 13
       item.target.src=`./images/${targetImgPic}.jpg`
       this.setState({beginP1Flipped: cardsFlipped})
@@ -99,20 +117,21 @@ class App extends React.Component {
   }
 
   const player2Click = (item) => {
-    let cardsFlipped = this.state.beginP2Flipped + 1
-    if (cardsFlipped < 3 && this.state.playing === false) {
+    let cardsFlipped = this.state.beginP2Flipped
+    if (cardsFlipped < 2 && this.state.playing === false) {
+      cardsFlipped++
       let targetImgPic = item.target.id % 13 === 0 ? 13 : item.target.id % 13
       item.target.src=`./images/${targetImgPic}.jpg`
       this.setState({beginP2Flipped: cardsFlipped})
     }
   }
 
-    let renderPlay1Hand = this.state.play1Hand.map((card1)=>{
-      return <img onClick={player1Click} src={"./images/0.jpg"} id={card1.id} />
+    let renderPlay1Hand = this.state.play1Hand.map((card1, index)=>{
+      return <img onClick={player1Click} src={"./images/0.jpg"} id={card1.id} className={index} />
     })
 
-    let renderPlay2Hand = this.state.play2Hand.map((card2)=>{
-      return <img onClick={player2Click} src={"./images/0.jpg"} id={card2.id} />
+    let renderPlay2Hand = this.state.play2Hand.map((card2, index)=>{
+      return <img onClick={player2Click} src={"./images/0.jpg"} id={card2.id} className={index} />
     })
 
     let deck = <img onClick={getCardFromDeck} src={"./images/0.jpg"} id={null} />
@@ -125,6 +144,7 @@ class App extends React.Component {
 
         <span>Discard</span><span>Deck</span><div></div>
         <span><img src={this.state.discard.image} id={this.state.discard.id}/></span><span>{deck}</span>
+        <Button clickFunc={this.startGame} buttonName="Start Game"/>
       </div>
     );
   }
