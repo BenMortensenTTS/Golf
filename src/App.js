@@ -71,17 +71,32 @@ class App extends React.Component {
     })
   }
 
+ 
+
+
   render() {
+ 
+
+  const player1Click = (item) => {
+    let targetImgPic = item.target.id % 13 === 0 ? 13 : item.target.id % 13
+    item.target.src=`./images/${targetImgPic}.jpg`
+  }
+
+  const player2Click = (item) => {
+    let targetImgPic = item.target.id % 13 === 0 ? 13 : item.target.id % 13
+    item.target.src=`./images/${targetImgPic}.jpg`
+  }
+
     console.log(this.state.play1Hand);
     console.log(this.state.play2Hand);
     console.log('cardArray',this.state.cardArray);
 
     let renderPlay1Hand = this.state.play1Hand.map((card1)=>{
-      return <img src={"./images/0.jpg"} id={card1.id} />
+      return <img onClick={player1Click} src={"./images/0.jpg"} id={card1.id} />
     })
 
     let renderPlay2Hand = this.state.play2Hand.map((card2)=>{
-      return <img src={"./images/0.jpg"} id={card2.id} />
+      return <img onClick={player2Click} src={"./images/0.jpg"} id={card2.id} />
     })
     return (
       <div>
