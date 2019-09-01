@@ -13,7 +13,8 @@ class App extends React.Component {
       beginP2Flipped: 0,
       playing: false,
       p1Turn: null,
-      p2Turn: null
+      p2Turn: null,
+      deckCardID: null
     }
   }
 
@@ -47,7 +48,6 @@ class App extends React.Component {
       return {
         id:idNum,
         image: cardImageArr[imgIndex],
-        index: null
       }
     })
 
@@ -89,18 +89,18 @@ class App extends React.Component {
   render() {
  
   const getCardFromDeck = (item) => {
-    if(this.state.playing) {
+    if(this.state.playing && this.state.cardArray.length > 0) {
+      console.log(item.target)
       let temp = this.state.cardArray
       let card = temp.splice(this.randCardIndex(temp), 1)[0];
-      if(temp.length !== 0) { 
-        card = card.id % 13 === 0 ? 13 : card.id % 13
-        item.target.src = `./images/${card}.jpg`
-    }
+      card = card.id % 13 === 0 ? 13 : card.id % 13
+      item.target.src = `./images/${card}.jpg`
       this.setState({
         cardArray: temp,
-
+        deckCardID: card
       })
-      return card;
+    } else {
+      item.target.src = `./images/0.jpg`
     }
   }
 
@@ -127,15 +127,11 @@ class App extends React.Component {
     let renderPlay1Hand = this.state.play1Hand.map((card1, index)=>{
       return <img onClick={player1Click} src={"./images/0.jpg"} id={card1.id} className={index} key={index+10} alt="card" />
     })
-
     let renderPlay2Hand = this.state.play2Hand.map((card2, index)=>{
       return <img onClick={player2Click} src={"./images/0.jpg"} id={card2.id} className={index} key={index+100} alt="card"/>
     })
-
-    let deck = <img onClick={getCardFromDeck} src={"./images/0.jpg"} id={null} alt="deck" />
-
+    let deck = <img onClick={getCardFromDeck} src={"./images/0.jpg"} id={this.state.deckCardID} alt="deck" />
     let discard = <img src={this.state.discard.image} id={this.state.discard.id} alt="discard"/>
-
     let cardsOrEnd = this.state.cardArray.length !== 0 ? <h3>{"Amount of cards left in deck: " + this.state.cardArray.length}</h3> : <h3>No more cards.</h3>
     
 
