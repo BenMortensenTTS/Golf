@@ -111,8 +111,10 @@ class App extends React.Component {
 
     this.setState({
       p1Total: total1,
-      p2Total: total2
+      p2Total: total2,
+      playing: false
     })
+
   }
 
 
@@ -172,7 +174,17 @@ class App extends React.Component {
     let cardsOrEnd = this.state.cardArray.length !== 0 ? <h3>{"Amount of cards left in deck: " + this.state.cardArray.length}</h3> : <h3>No more cards.</h3>
     let player1Score = <h3>{"Player 1 Score: " + this.state.p1Total}</h3>
     let player2Score = <h3>{"Player 2 Score " + this.state.p2Total}</h3>
-    
+    let winner;
+
+    if(this.state.p1Total > this.state.p2Total) {
+      winner = <h3>{"The Winner is Player 1!"}</h3>
+    } else if (this.state.p2Total > this.state.p1Total) {
+      winner = <h3>{"The Winner is Player 2!"}</h3>
+    } else if (this.state.p1Total !== 0 && this.state.p2Total === this.state.p1Total) {
+      winner = <h3>{"This was a tie!"}</h3>
+    } else {
+      winner = <h3></h3>
+    }
 
     return (
       <div>
@@ -186,6 +198,7 @@ class App extends React.Component {
         <div>{player2Score}</div>
         <Button clickFunc={this.startGame} buttonName="Start Game"/>
         <Button clickFunc={this.calculateScore} buttonName="Calculate Score"/>
+        <div>{winner}</div>
       </div>
     );
   }
