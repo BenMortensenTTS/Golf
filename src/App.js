@@ -42,17 +42,10 @@ class App extends React.Component {
 
 
   componentDidMount() {
+  
     let p1Wins = localStorage.getItem('p1Wins')
     let p2Wins = localStorage.getItem('p2Wins')
-<<<<<<< HEAD
-    if(p1Wins > -1) {
-      p1Wins = p1Wins
-    } else {
-      p1Wins = 0;
-      p2Wins = 0;
-    }
-=======
->>>>>>> 7b7c1bb7525a3951231308cc8513e4782a7e016e
+    
 
 
     let deckIndexArr = this.genDeck();
@@ -99,11 +92,8 @@ class App extends React.Component {
       discard: discardObj,
       p1Wins,
       p2Wins
-<<<<<<< HEAD
     }, ()=> {
       console.log("p1Wins = " +this.state.p1Wins)
-=======
->>>>>>> 7b7c1bb7525a3951231308cc8513e4782a7e016e
     })
   }
 
@@ -145,11 +135,7 @@ class App extends React.Component {
         playing: false
       })
 
-<<<<<<< HEAD
       if (total2 > total1) {
-=======
-     if (total2 > total1) {
->>>>>>> 7b7c1bb7525a3951231308cc8513e4782a7e016e
       let curr = parseInt(this.state.p2Wins) + 1
       this.setState({p2Wins: curr}, () => {
         if(parseInt(this.state.p2Wins) > 8) {
@@ -192,13 +178,9 @@ class App extends React.Component {
         console.log(play1)
         this.setState({
           discard: this.state.discardReferenceArray[(this.state.itemID)-1],
-<<<<<<< HEAD
           play1Hand: play1,
           p1Turn: !this.state.p1Turn,
           p2Turn: !this.state.p2Turn
-=======
-          play1Hand: play1
->>>>>>> 7b7c1bb7525a3951231308cc8513e4782a7e016e
         })
       }
 
@@ -207,13 +189,9 @@ class App extends React.Component {
         play2.splice(this.state.selectIndex, 1, this.state.discard)
         this.setState({
           discard: this.state.discardReferenceArray[(this.state.itemID)-1],
-<<<<<<< HEAD
           play2Hand: play2,
           p1Turn: !this.state.p1Turn,
           p2Turn: !this.state.p2Turn
-=======
-          play2Hand: play2
->>>>>>> 7b7c1bb7525a3951231308cc8513e4782a7e016e
         })
       }
 
@@ -223,13 +201,9 @@ class App extends React.Component {
         this.setState({
           deckObj: {id: 0},
           discard: this.state.discardReferenceArray[(this.state.itemID)-1],
-<<<<<<< HEAD
           play1Hand: play1,
           p1Turn: !this.state.p1Turn,
           p2Turn: !this.state.p2Turn
-=======
-          play1Hand: play1
->>>>>>> 7b7c1bb7525a3951231308cc8513e4782a7e016e
         })
 
       }
@@ -239,34 +213,23 @@ class App extends React.Component {
         this.setState({
           deckObj: {id: 0},
           play2Hand: play2,
-<<<<<<< HEAD
           discard: this.state.discardReferenceArray[(this.state.itemID)-1],
           p1Turn: !this.state.p1Turn,
           p2Turn: !this.state.p2Turn
-=======
-          discard: this.state.discardReferenceArray[(this.state.itemID)-1]
->>>>>>> 7b7c1bb7525a3951231308cc8513e4782a7e016e
         })
       }
 
   render() {
 
-<<<<<<< HEAD
     console.log(this.state.p1Wins)
 
-=======
->>>>>>> 7b7c1bb7525a3951231308cc8513e4782a7e016e
   const getCardFromDeck = (item) => {
 
     if(this.state.cardImgIndex !== 0) {
       item.target.src = `./images/0.jpg`
-<<<<<<< HEAD
       this.setState({
         cardImgIndex: 0,
       })
-=======
-      this.setState({cardImgIndex: 0})
->>>>>>> 7b7c1bb7525a3951231308cc8513e4782a7e016e
     }
     
     if(this.state.playing && this.state.cardArray.length > 0 && this.state.cardImgIndex === 0) {
@@ -332,11 +295,7 @@ class App extends React.Component {
     let play1HandBot = renderPlay1Hand.slice(3);
 
     let renderPlay2Hand = this.state.play2Hand.map((card2, index)=>{
-<<<<<<< HEAD
       return <img draggable onClick={player2Click} src={"./images/0.jpg"} id={card2.id} className={index} key={index+100} alt="card"/>
-=======
-      return <img draggable="true" onClick={player2Click} src={"./images/0.jpg"} id={card2.id} className={index} key={index+100} alt="card"/>
->>>>>>> 7b7c1bb7525a3951231308cc8513e4782a7e016e
     })
 
     let play2HandTop = renderPlay2Hand.slice(0,3);
@@ -351,7 +310,6 @@ class App extends React.Component {
     let p1Wins = <h3>{"Player 1 Wins: " + this.state.p1Wins}</h3>
     let p2Wins = <h3>{"Player 2 Wins: " + this.state.p2Wins}</h3>
 
-<<<<<<< HEAD
     let turn;
     if(this.state.p1Turn) {
       turn = <h3>{"Turn: Player 1"}</h3>
@@ -359,8 +317,6 @@ class App extends React.Component {
       turn = <h3>{"Turn: Player 2"}</h3>
     }
 
-=======
->>>>>>> 7b7c1bb7525a3951231308cc8513e4782a7e016e
     if(this.state.p1Total > this.state.p2Total) {
       winner = <h3>{"The Winner is Player 1!"}</h3>
     } else if (this.state.p2Total > this.state.p1Total) {
@@ -373,10 +329,7 @@ class App extends React.Component {
 
     return (
       <div>
-<<<<<<< HEAD
         <div id="turn">{turn}</div>
-=======
->>>>>>> 7b7c1bb7525a3951231308cc8513e4782a7e016e
         <div id="cards">
           <div>{play1HandTop}</div>
           <div>{play1HandBot}</div>
