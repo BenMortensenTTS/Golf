@@ -21,3 +21,9 @@ img {
 	text-align: center;
 }
 
+#turn {
+	position: absolute;
+	right: 450px;
+	bottom: 390px;
+}
+
