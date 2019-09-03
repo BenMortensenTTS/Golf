@@ -293,13 +293,6 @@ class App extends React.Component {
     let winner;
     let p1Wins = <h3>{"Player 1 Wins: " + this.state.p1Wins}</h3>
     let p2Wins = <h3>{"Player 2 Wins: " + this.state.p2Wins}</h3>
-    let turn;
-    if(this.state.p1Turn) {
-      turn = <h3>{"Turn: Player 1"}</h3>
-    } else if (this.state.p2Turn) {
-      turn =<h3>{"Turn: Player 2"}</h3>
-    } 
-
 
     if(this.state.p1Total > this.state.p2Total) {
       winner = <h3>{"The Winner is Player 1!"}</h3>
@@ -313,7 +306,6 @@ class App extends React.Component {
 
     return (
       <div>
-        <div id="turn">{turn}</div>
         <div id="cards">
           <div>{play1HandTop}</div>
           <div>{play1HandBot}</div>
