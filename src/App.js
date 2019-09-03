@@ -8,19 +8,23 @@ class App extends React.Component {
       play1Hand: [],
       play2Hand: [],
       cardArray: [],
+      discardReferenceArray: [],
       discard: {},
+      deckObj: {},
       beginP1Flipped: 0,
       beginP2Flipped: 0,
       playing: false,
       p1Turn: null,
       p2Turn: null,
-      deckCardID: null,
       totalP1Flipped: 0,
       totalP2Flipped: 0,
       p1Total: 0,
       p2Total: 0,
       p1Wins: 0,
-      p2Wins: 0
+      p2Wins: 0,
+      selectIndex: null,
+      itemID: null,
+      cardImgIndex: 0
     }
   }
 
@@ -49,6 +53,7 @@ class App extends React.Component {
     let discardObj;
     let randNum;
     let discardIndex;
+    let discardReference = [];
 
     for(let i=1;i<14;i++){
       cardImageArr[i] = `./images/${i}.jpg`;
@@ -60,6 +65,9 @@ class App extends React.Component {
         image: cardImageArr[imgIndex],
       }
     })
+    for (let i = 0; i < 52; i++) {
+      discardReference[i] = deckImageArr[i];
+    }
 
     discardIndex = this.randCardIndex(deckImageArr);
     discardObj = deckImageArr.splice(discardIndex,1)[0];
@@ -78,6 +86,7 @@ class App extends React.Component {
       play1Hand: p1hand,
       play2Hand: p2hand,
       cardArray: deckImageArr,
+      discardReferenceArray: discardReference,
       discard: discardObj,
       p1Wins,
       p2Wins
@@ -151,19 +160,65 @@ class App extends React.Component {
     }
   }
 
+  clearWins = () => {
+    this.setState({p1Wins: 0})
+    this.setState({p2Wins: 0})
+    localStorage.setItem("p1Wins", 0)
+    localStorage.setItem("p2Wins", 0)
+}
+
+
+      selectSwapDiscard1 = () => {
+        let play1 = this.state.play1Hand
+        play1.splice(this.state.selectIndex, 1, this.state.discard)
+        console.log(play1)
+        this.setState({
+          discard: this.state.discardReferenceArray[(this.state.itemID)-1],
+          play1Hand: play1
+        })
+      }
+
+      selectSwapDiscard2 = () => {
+        let play2 = this.state.play2Hand
+        play2.splice(this.state.selectIndex, 1, this.state.discard)
+        this.setState({
+          discard: this.state.discardReferenceArray[(this.state.itemID)-1],
+          play2Hand: play2
+        })
+      }
+
+      selectSwapDeck1 = () => {
+        let play1 = this.state.play1Hand
+        play1.splice(this.state.selectIndex, 1, this.state.deckObj)
+        this.setState({
+          deckObj: this.state.discardReferenceArray[(this.state.itemID)-1],
+          play1Hand: play1
+        })
+      }
+      selectSwapDeck2 = () => {
+       let play2 = this.state.play2Hand
+        play2.splice(this.state.selectIndex, 1, this.state.deckObj)
+        this.setState({
+          deckObj: {id: 0},
+          play2Hand: play2
+        })
+      }
 
   render() {
 
   const getCardFromDeck = (item) => {
-    if(this.state.playing && this.state.cardArray.length > 0) {
-      console.log(item.target)
+    console.log("trigger")
+    console.log(this.state.cardImgIndex)
+    if(this.state.playing && this.state.cardArray.length > 0 && this.state.cardImgIndex === 0) {
       let temp = this.state.cardArray
       let card = temp.splice(this.randCardIndex(temp), 1)[0];
+      let cardObj = card
       card = card.id % 13 === 0 ? 13 : card.id % 13
       item.target.src = `./images/${card}.jpg`
       this.setState({
         cardArray: temp,
-        deckCardID: card
+        deckObj: cardObj,
+        cardImgIndex: card
       })
     } else {
       item.target.src = `./images/0.jpg`
@@ -172,7 +227,8 @@ class App extends React.Component {
 
   const player1Click = (item) => {
     let cardsFlipped = this.state.beginP1Flipped
-    if ((cardsFlipped < 2 && this.state.playing === false) || this.state.p1Total !== 0) {
+    console.log(item.target.id)
+  
       cardsFlipped++;
       let targetImgPic = item.target.id % 13 === 0 ? 13 : item.target.id % 13
       item.target.src=`./images/${targetImgPic}.jpg`
@@ -180,13 +236,16 @@ class App extends React.Component {
         beginP1Flipped: cardsFlipped,
         totalP1Flipped: cardsFlipped
       })
-
-    }
+    
+    this.setState({
+      selectIndex: item.target.className,
+      itemID: item.target.id
+    })
   }
 
   const player2Click = (item) => {
     let cardsFlipped = this.state.beginP2Flipped
-    if ((cardsFlipped < 2 && this.state.playing === false) || this.state.p2Total !== 0) {
+   
       cardsFlipped++
       let targetImgPic = item.target.id % 13 === 0 ? 13 : item.target.id % 13
       item.target.src=`./images/${targetImgPic}.jpg`
@@ -194,6 +253,23 @@ class App extends React.Component {
         beginP2Flipped: cardsFlipped,
         totalP2Flipped: cardsFlipped
       })
+    
+    this.setState({
+      selectIndex: item.target.className,
+      itemID: item.target.id
+    })
+  }
+
+  const discardPic = (item) => {
+    let targetImgPic = item.target.id % 13 === 0 ? 13 : item.target.id % 13
+    item.target.src=`./images/${targetImgPic}.jpg`
+  }
+
+  const deckPic = (item) => {
+     console.log("boop")
+    if(this.state.cardImgIndex !== 0) {
+      item.target.src = `./images/0.jpg`
+      this.setState({cardImgIndex: 0})
     }
   }
 
@@ -210,8 +286,8 @@ class App extends React.Component {
     let play2HandTop = renderPlay2Hand.slice(0,3);
     let play2HandBot = renderPlay2Hand.slice(3);
 
-    let deck = <img onClick={getCardFromDeck} src={"./images/0.jpg"} id={this.state.deckCardID} alt="deck" />
-    let discard = <img src={this.state.discard.image} id={this.state.discard.id} alt="discard"/>
+    let deck = <img onClick={deckPic} onClick={getCardFromDeck} src={"./images/0.jpg"} id={this.state.deckCardID} alt="deck" />
+    let discard = <img clickFunc={this.discardPic} src={this.state.discard.image} id={this.state.discard.id} alt="discard"/>
     let cardsOrEnd = this.state.cardArray.length !== 0 ? <h3>{"Amount of cards left in deck: " + this.state.cardArray.length}</h3> : <h3>No more cards.</h3>
     let player1Score = <h3>{"Player 1 Score: " + this.state.p1Total}</h3>
     let player2Score = <h3>{"Player 2 Score " + this.state.p2Total}</h3>
@@ -236,8 +312,13 @@ class App extends React.Component {
           <div>{play1HandTop}</div>
           <div>{play1HandBot}</div>
         
-          <span className="spanMove">Discard</span><span className="spanMove">Deck</span><div></div>
-          <span className="spanMove">{discard}</span><span className="spanMove">{deck}</span>
+          <Button clickFunc={this.selectSwapDiscard1} buttonName="Swap Discard"/>
+          <Button clickFunc={this.selectSwapDeck1} buttonName="Swap Deck"/>
+
+          <div><span className="spanMove">{discard}</span><span className="spanMove">{deck}</span></div>
+          
+          <Button clickFunc={this.selectSwapDiscard2} buttonName="Swap Discard"/>
+          <Button clickFunc={this.selectSwapDeck2} buttonName="Swap Deck"/>
 
           <div>{play2HandTop}</div>
           <div>{play2HandBot}</div>
@@ -248,6 +329,7 @@ class App extends React.Component {
           
           <Button clickFunc={this.startGame} buttonName="Start Game"/>
           <Button clickFunc={this.calculateScore} buttonName="Calculate Score"/> 
+          <Button clickFunc={this.clearWins} buttonName="Clear Wins"/>
 
           <div>{cardsOrEnd}</div>
           <div>{player1Score}</div>
@@ -257,9 +339,6 @@ class App extends React.Component {
           <div id="wins"><span>{p1Wins}{p2Wins}</span></div>
 
         </div>
-
-        
-
       </div>
     );
   }
