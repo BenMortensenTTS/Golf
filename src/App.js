@@ -42,9 +42,10 @@ class App extends React.Component {
 
 
   componentDidMount() {
-
+    
     let p1Wins = localStorage.getItem('p1Wins')
     let p2Wins = localStorage.getItem('p2Wins')
+
 
     let deckIndexArr = this.genDeck();
     let p1hand = [];
@@ -88,10 +89,15 @@ class App extends React.Component {
       cardArray: deckImageArr,
       discardReferenceArray: discardReference,
       discard: discardObj,
-      p1Wins,
-      p2Wins
+      p1Wins: p1Wins,
+      p2Wins: p2Wins
     }, ()=> {
-      console.log("p1Wins = " +this.state.p1Wins)
+      if(this.state.p1Wins === null) {
+        this.setState({
+          p1Wins: 0,
+          p2Wins: 0
+        })
+      }
     })
   }
 
@@ -134,8 +140,8 @@ class App extends React.Component {
       })
 
       if (total2 < total1) {
-      let curr = parseInt(this.state.p2Wins) + 1
-      this.setState({p2Wins: curr}, () => {
+        let curr = parseInt(this.state.p2Wins) + 1
+        this.setState({p2Wins: curr}, () => {
         if(parseInt(this.state.p2Wins) > 8) {
           localStorage.setItem('p2Wins', 0);
           localStorage.setItem('p1Wins', 0);
@@ -214,6 +220,8 @@ class App extends React.Component {
       }
 
   render() {
+
+    console.log("this.state.p1Wins = " +this.state.p1Wins)
 
   const getCardFromDeck = (item) => {
 
