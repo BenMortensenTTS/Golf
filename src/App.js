@@ -42,11 +42,9 @@ class App extends React.Component {
 
 
   componentDidMount() {
-  
+
     let p1Wins = localStorage.getItem('p1Wins')
     let p2Wins = localStorage.getItem('p2Wins')
-    
-
 
     let deckIndexArr = this.genDeck();
     let p1hand = [];
@@ -135,7 +133,7 @@ class App extends React.Component {
         playing: false
       })
 
-      if (total2 > total1) {
+      if (total2 < total1) {
       let curr = parseInt(this.state.p2Wins) + 1
       this.setState({p2Wins: curr}, () => {
         if(parseInt(this.state.p2Wins) > 8) {
@@ -149,7 +147,7 @@ class App extends React.Component {
       })
     }
 
-      else if (total1 > total2) {
+      else if (total1 < total2) {
         let curr = parseInt(this.state.p1Wins) + 1
         this.setState({p1Wins: curr}, () => {
           localStorage.setItem('p1Wins', curr);
@@ -201,9 +199,7 @@ class App extends React.Component {
         this.setState({
           deckObj: {id: 0},
           discard: this.state.discardReferenceArray[(this.state.itemID)-1],
-          play1Hand: play1,
-          p1Turn: !this.state.p1Turn,
-          p2Turn: !this.state.p2Turn
+          play1Hand: play1
         })
 
       }
@@ -213,15 +209,11 @@ class App extends React.Component {
         this.setState({
           deckObj: {id: 0},
           play2Hand: play2,
-          discard: this.state.discardReferenceArray[(this.state.itemID)-1],
-          p1Turn: !this.state.p1Turn,
-          p2Turn: !this.state.p2Turn
+          discard: this.state.discardReferenceArray[(this.state.itemID)-1]
         })
       }
 
   render() {
-
-    console.log(this.state.p1Wins)
 
   const getCardFromDeck = (item) => {
 
@@ -229,6 +221,8 @@ class App extends React.Component {
       item.target.src = `./images/0.jpg`
       this.setState({
         cardImgIndex: 0,
+        p1Turn: !this.state.p1Turn,
+        p2Turn: !this.state.p2Turn
       })
     }
     
