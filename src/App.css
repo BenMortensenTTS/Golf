@@ -4,15 +4,25 @@ body {
 }
 
 img {
-  height: 100px;
-  width: 70px; 
+  height: 110px;
+  width: 71.5px; 
 }
 
-span {
+.spanMove {
   margin: 10px;
 }
 
-#mainDiv {
-  text-align: center;
-  display: inline-block;
+#cards {
+	text-align: center;
+	margin: 15px auto;
+}
+
+#info {
+	text-align: center;
+}
+
+#turn {
+	position: sticky;
+	right: 450px;
+	bottom: 390px;
 }
