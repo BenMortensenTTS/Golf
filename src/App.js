@@ -191,24 +191,31 @@ class App extends React.Component {
         let play1 = this.state.play1Hand
         play1.splice(this.state.selectIndex, 1, this.state.deckObj)
         this.setState({
-          deckObj: this.state.discardReferenceArray[(this.state.itemID)-1],
+          deckObj: {id: 0},
+          discard: this.state.discardReferenceArray[(this.state.itemID)-1],
           play1Hand: play1
         })
+
       }
       selectSwapDeck2 = () => {
        let play2 = this.state.play2Hand
         play2.splice(this.state.selectIndex, 1, this.state.deckObj)
         this.setState({
           deckObj: {id: 0},
-          play2Hand: play2
+          play2Hand: play2,
+          discard: this.state.discardReferenceArray[(this.state.itemID)-1]
         })
       }
 
   render() {
 
   const getCardFromDeck = (item) => {
-    console.log("trigger")
-    console.log(this.state.cardImgIndex)
+
+    if(this.state.cardImgIndex !== 0) {
+      item.target.src = `./images/0.jpg`
+      this.setState({cardImgIndex: 0})
+    }
+    
     if(this.state.playing && this.state.cardArray.length > 0 && this.state.cardImgIndex === 0) {
       let temp = this.state.cardArray
       let card = temp.splice(this.randCardIndex(temp), 1)[0];
@@ -265,14 +272,6 @@ class App extends React.Component {
     item.target.src=`./images/${targetImgPic}.jpg`
   }
 
-  const deckPic = (item) => {
-     console.log("boop")
-    if(this.state.cardImgIndex !== 0) {
-      item.target.src = `./images/0.jpg`
-      this.setState({cardImgIndex: 0})
-    }
-  }
-
     let renderPlay1Hand = this.state.play1Hand.map((card1, index)=>{
       return <img draggable onClick={player1Click} src={"./images/0.jpg"} id={card1.id} className={index} key={index+10} alt="card" />
     })
@@ -286,7 +285,7 @@ class App extends React.Component {
     let play2HandTop = renderPlay2Hand.slice(0,3);
     let play2HandBot = renderPlay2Hand.slice(3);
 
-    let deck = <img onClick={deckPic} onClick={getCardFromDeck} src={"./images/0.jpg"} id={this.state.deckCardID} alt="deck" />
+    let deck = <img onClick={getCardFromDeck} src={"./images/0.jpg"} id={this.state.deckCardID} alt="deck" />
     let discard = <img clickFunc={this.discardPic} src={this.state.discard.image} id={this.state.discard.id} alt="discard"/>
     let cardsOrEnd = this.state.cardArray.length !== 0 ? <h3>{"Amount of cards left in deck: " + this.state.cardArray.length}</h3> : <h3>No more cards.</h3>
     let player1Score = <h3>{"Player 1 Score: " + this.state.p1Total}</h3>
