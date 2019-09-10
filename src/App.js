@@ -319,9 +319,9 @@ class App extends React.Component {
       turn = <h3>{"Turn: P2"}</h3>
     }
 
-    if(this.state.p1Total > this.state.p2Total) {
+    if(this.state.p1Total < this.state.p2Total) {
       winner = <h3>{"The Winner is Player 1!"}</h3>
-    } else if (this.state.p2Total > this.state.p1Total) {
+    } else if (this.state.p2Total < this.state.p1Total) {
       winner = <h3>{"The Winner is Player 2!"}</h3>
     } else if (this.state.p1Total !== 0 && this.state.p2Total === this.state.p1Total) {
       winner = <h3>{"This was a tie!"}</h3>
