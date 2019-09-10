@@ -251,9 +251,8 @@ class App extends React.Component {
   }
 
   const player1Click = (item) => {
-    let cardsFlipped = this.state.beginP1Flipped
-    console.log(item.target.id)
-  
+    if (this.state.beginP1Flipped !== 2 || this.state.playing !== false) {
+      let cardsFlipped = this.state.beginP1Flipped  
       cardsFlipped++;
       let targetImgPic = item.target.id % 13 === 0 ? 13 : item.target.id % 13
       item.target.src=`./images/${targetImgPic}.jpg`
@@ -261,28 +260,29 @@ class App extends React.Component {
         beginP1Flipped: cardsFlipped,
         totalP1Flipped: cardsFlipped
       })
-    
-    this.setState({
-      selectIndex: item.target.className,
-      itemID: item.target.id
-    })
+      this.setState({
+        selectIndex: item.target.className,
+        itemID: item.target.id
+      })
+    }
   }
 
   const player2Click = (item) => {
-    let cardsFlipped = this.state.beginP2Flipped
-   
-      cardsFlipped++
-      let targetImgPic = item.target.id % 13 === 0 ? 13 : item.target.id % 13
-      item.target.src=`./images/${targetImgPic}.jpg`
-      this.setState({
-        beginP2Flipped: cardsFlipped,
-        totalP2Flipped: cardsFlipped
+
+    if (this.state.beginP2Flipped !== 2 || this.state.playing !== false) {
+      let cardsFlipped = this.state.beginP2Flipped
+        cardsFlipped++
+        let targetImgPic = item.target.id % 13 === 0 ? 13 : item.target.id % 13
+        item.target.src=`./images/${targetImgPic}.jpg`
+        this.setState({
+          beginP2Flipped: cardsFlipped,
+          totalP2Flipped: cardsFlipped
+        })
+        this.setState({
+          selectIndex: item.target.className,
+          itemID: item.target.id
       })
-    
-    this.setState({
-      selectIndex: item.target.className,
-      itemID: item.target.id
-    })
+    }
   }
 
   const discardPic = (item) => {
