@@ -177,46 +177,53 @@ class App extends React.Component {
 
 
       selectSwapDiscard1 = () => {
-        let play1 = this.state.play1Hand
-        play1.splice(this.state.selectIndex, 1, this.state.discard)
-        console.log(play1)
-        this.setState({
-          discard: this.state.discardReferenceArray[(this.state.itemID)-1],
-          play1Hand: play1,
-          p1Turn: !this.state.p1Turn,
-          p2Turn: !this.state.p2Turn
-        })
+        if(this.state.p1Turn) {
+          let play1 = this.state.play1Hand
+          play1.splice(this.state.selectIndex, 1, this.state.discard)
+          console.log(play1)
+          this.setState({
+            discard: this.state.discardReferenceArray[(this.state.itemID)-1],
+            play1Hand: play1,
+            p1Turn: !this.state.p1Turn,
+            p2Turn: !this.state.p2Turn
+          })
+        }
       }
 
       selectSwapDiscard2 = () => {
-        let play2 = this.state.play2Hand
-        play2.splice(this.state.selectIndex, 1, this.state.discard)
-        this.setState({
-          discard: this.state.discardReferenceArray[(this.state.itemID)-1],
-          play2Hand: play2,
-          p1Turn: !this.state.p1Turn,
-          p2Turn: !this.state.p2Turn
-        })
+        if(this.state.p2Turn) {
+          let play2 = this.state.play2Hand
+          play2.splice(this.state.selectIndex, 1, this.state.discard)
+          this.setState({
+            discard: this.state.discardReferenceArray[(this.state.itemID)-1],
+            play2Hand: play2,
+            p1Turn: !this.state.p1Turn,
+            p2Turn: !this.state.p2Turn
+          })
+        }
       }
 
       selectSwapDeck1 = () => {
-        let play1 = this.state.play1Hand
-        play1.splice(this.state.selectIndex, 1, this.state.deckObj)
-        this.setState({
-          deckObj: {id: 0},
-          discard: this.state.discardReferenceArray[(this.state.itemID)-1],
-          play1Hand: play1
-        })
-
+        if(this.state.p1Turn) {
+          let play1 = this.state.play1Hand
+          play1.splice(this.state.selectIndex, 1, this.state.deckObj)
+          this.setState({
+            deckObj: {id: 0},
+            discard: this.state.discardReferenceArray[(this.state.itemID)-1],
+            play1Hand: play1
+          })
+        }
       }
       selectSwapDeck2 = () => {
-       let play2 = this.state.play2Hand
-        play2.splice(this.state.selectIndex, 1, this.state.deckObj)
-        this.setState({
-          deckObj: {id: 0},
-          play2Hand: play2,
-          discard: this.state.discardReferenceArray[(this.state.itemID)-1]
-        })
+        if(this.state.p2Turn) {
+          let play2 = this.state.play2Hand
+          play2.splice(this.state.selectIndex, 1, this.state.deckObj)
+          this.setState({
+            deckObj: {id: 0},
+            play2Hand: play2,
+            discard: this.state.discardReferenceArray[(this.state.itemID)-1]
+          })
+        }
       }
 
   render() {
@@ -251,7 +258,7 @@ class App extends React.Component {
   }
 
   const player1Click = (item) => {
-    if (this.state.beginP1Flipped !== 2 || this.state.playing !== false) {
+    if ((this.state.p1Turn === null && this.state.beginP1Flipped !== 2) || this.state.p1Turn) {
       let cardsFlipped = this.state.beginP1Flipped  
       cardsFlipped++;
       let targetImgPic = item.target.id % 13 === 0 ? 13 : item.target.id % 13
@@ -269,7 +276,7 @@ class App extends React.Component {
 
   const player2Click = (item) => {
 
-    if (this.state.beginP2Flipped !== 2 || this.state.playing !== false) {
+    if ((this.state.p2Turn === null && this.state.beginP2Flipped !== 2) || this.state.p2Turn) {
       let cardsFlipped = this.state.beginP2Flipped
         cardsFlipped++
         let targetImgPic = item.target.id % 13 === 0 ? 13 : item.target.id % 13
