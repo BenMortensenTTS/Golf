@@ -92,7 +92,7 @@ class App extends React.Component {
       p1Wins: p1Wins,
       p2Wins: p2Wins
     }, ()=> {
-      if(this.state.p1Wins === null) {
+      if(this.state.p1Wins === null || this.state.p2Wins === null) {
         this.setState({
           p1Wins: 0,
           p2Wins: 0
@@ -331,20 +331,22 @@ class App extends React.Component {
 
     return (
       <div>
-        <div id="turn">{turn}</div>
+        
         <div id="cards">
           <div>{play1HandTop}</div>
+          <div id="p1"><h3>Player 1</h3></div>
           <div>{play1HandBot}</div>
         
           <Button clickFunc={this.selectSwapDiscard1} buttonName="Swap Discard"/>
           <Button clickFunc={this.selectSwapDeck1} buttonName="Swap Deck"/>
-
+          <div id="turn">{turn}</div>
           <div><span className="spanMove">{discard}</span><span className="spanMove">{deck}</span></div>
           
           <Button clickFunc={this.selectSwapDiscard2} buttonName="Swap Discard"/>
           <Button clickFunc={this.selectSwapDeck2} buttonName="Swap Deck"/>
 
           <div>{play2HandTop}</div>
+          <div id="p2"><h3>Player 2</h3></div>
           <div>{play2HandBot}</div>
 
         </div>
