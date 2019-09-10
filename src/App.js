@@ -314,9 +314,9 @@ class App extends React.Component {
 
     let turn;
     if(this.state.p1Turn) {
-      turn = <h3>{"Turn: Player 1"}</h3>
+      turn = <h3>{"Turn: P1"}</h3>
     } else if (this.state.p2Turn) {
-      turn = <h3>{"Turn: Player 2"}</h3>
+      turn = <h3>{"Turn: P2"}</h3>
     }
 
     if(this.state.p1Total > this.state.p2Total) {
@@ -334,7 +334,7 @@ class App extends React.Component {
         
         <div id="cards">
           <div>{play1HandTop}</div>
-          <div id="p1"><h3>Player 1</h3></div>
+          <div id="p1"><h3>P1</h3></div>
           <div>{play1HandBot}</div>
         
           <Button clickFunc={this.selectSwapDiscard1} buttonName="Swap Discard"/>
@@ -346,7 +346,7 @@ class App extends React.Component {
           <Button clickFunc={this.selectSwapDeck2} buttonName="Swap Deck"/>
 
           <div>{play2HandTop}</div>
-          <div id="p2"><h3>Player 2</h3></div>
+          <div id="p2"><h3>P2</h3></div>
           <div>{play2HandBot}</div>
 
         </div>
