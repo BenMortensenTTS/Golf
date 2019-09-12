@@ -262,17 +262,17 @@ class App extends React.Component {
           let play1 = this.state.play1Hand;
           play1.splice(this.state.selectIndex, 1, this.state.deckObj);
           switch(this.state.selectIndex) {
-            case 0: this.setState({card1: this.state.deckObj})
+            case "0": this.setState({card1: this.state.deckObj})
             break;
-            case 1: this.setState({card2: this.state.deckObj})
+            case "1": this.setState({card2: this.state.deckObj})
             break;
-            case 2: this.setState({card3: this.state.deckObj})
+            case "2": this.setState({card3: this.state.deckObj})
             break;
-            case 3: this.setState({card4: this.state.deckObj})
+            case "3": this.setState({card4: this.state.deckObj})
             break;
-            case 4: this.setState({card5: this.state.deckObj})
+            case "4": this.setState({card5: this.state.deckObj})
             break;
-            case 5: this.setState({card6: this.state.deckObj})
+            case "5": this.setState({card6: this.state.deckObj})
             break;
           }
           this.setState({
@@ -287,17 +287,17 @@ class App extends React.Component {
           let play2 = this.state.play2Hand
           play2.splice(this.state.selectIndex, 1, this.state.deckObj)
           switch(this.state.selectIndex) {
-            case 0: this.setState({card7: this.state.deckObj})
+            case "0": this.setState({card7: this.state.deckObj})
             break;
-            case 1: this.setState({card8: this.state.deckObj})
+            case "1": this.setState({card8: this.state.deckObj})
             break;
-            case 2: this.setState({card9: this.state.deckObj})
+            case "2": this.setState({card9: this.state.deckObj})
             break;
-            case 3: this.setState({card10: this.state.deckObj})
+            case "3": this.setState({card10: this.state.deckObj})
             break;
-            case 4: this.setState({card11: this.state.deckObj})
+            case "4": this.setState({card11: this.state.deckObj})
             break;
-            case 5: this.setState({card12: this.state.deckObj})
+            case "5": this.setState({card12: this.state.deckObj})
             break;
           }
           this.setState({
