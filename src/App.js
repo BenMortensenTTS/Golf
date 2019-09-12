@@ -7,6 +7,18 @@ class App extends React.Component {
     this.state = {
       play1Hand: [],
       play2Hand: [],
+      card1: {},
+      card2: {},
+      card3: {},
+      card4: {},
+      card5: {},
+      card6: {},
+      card7: {},
+      card8: {},
+      card9: {},
+      card10: {},
+      card11: {},
+      card12: {},
       cardArray: [],
       discardReferenceArray: [],
       discard: {},
@@ -36,12 +48,12 @@ class App extends React.Component {
     return tempArray;
   }
 
-  randCardIndex=(deckArr)=>{
+  randCardIndex = (deckArr) => {
     return Math.floor(Math.random()*deckArr.length)
   }
 
 
-  componentDidMount() {
+  componentDidMount = () => {
     
     let p1Wins = localStorage.getItem('p1Wins')
     let p2Wins = localStorage.getItem('p2Wins')
@@ -56,14 +68,14 @@ class App extends React.Component {
     let discardIndex;
     let discardReference = [];
 
-    for(let i=1;i<14;i++){
-      cardImageArr[i] = `./images/${i}.jpg`;
-    }
+    // for(let i=1;i<14;i++){
+    //   cardImageArr[i] = `./images/${i}.jpg`;
+    // }
     let deckImageArr = deckIndexArr.map((idNum)=>{
       let imgIndex = (idNum%13)===0 ? 13 : idNum%13;
       return {
         id:idNum,
-        image: cardImageArr[imgIndex],
+        image: `./images/${imgIndex}.jpg`,
       }
     })
     for (let i = 0; i < 52; i++) {
@@ -78,9 +90,9 @@ class App extends React.Component {
       
       let randCardObj = deckImageArr.splice(randNum,1)[0];
       if(i < 6){
-        p1hand[i] = randCardObj;
+        p1hand[i] = {id: randCardObj.id, image: `./images/0.jpg`};
       } else {
-        p2hand[i-6] = randCardObj;
+        p2hand[i-6] = {id: randCardObj.id, image: `./images/0.jpg`};
       }
     }
     this.setState({
@@ -90,7 +102,19 @@ class App extends React.Component {
       discardReferenceArray: discardReference,
       discard: discardObj,
       p1Wins: p1Wins,
-      p2Wins: p2Wins
+      p2Wins: p2Wins,
+      card1: p1hand[0],
+      card2: p1hand[1],
+      card3: p1hand[2],
+      card4: p1hand[3],
+      card5: p1hand[4],
+      card6: p1hand[5],
+      card7: p2hand[0],
+      card8: p2hand[1],
+      card9: p2hand[2],
+      card10: p2hand[3],
+      card11: p2hand[4],
+      card12: p2hand[5]
     }, ()=> {
       if(this.state.p1Wins === null || this.state.p2Wins === null) {
         this.setState({
@@ -177,10 +201,24 @@ class App extends React.Component {
 
 
       selectSwapDiscard1 = () => {
+        console.log(this.state.selectIndex);
         if(this.state.p1Turn) {
           let play1 = this.state.play1Hand
           play1.splice(this.state.selectIndex, 1, this.state.discard)
-          console.log(play1)
+          switch(this.state.selectIndex) {
+            case "0": this.setState({card1: this.state.discard})
+            break;
+            case "1": this.setState({card2: this.state.discard})
+            break;
+            case "2": this.setState({card3: this.state.discard})
+            break;
+            case "3": this.setState({card4: this.state.discard})
+            break;
+            case "4": this.setState({card5: this.state.discard})
+            break;
+            case "5": this.setState({card6: this.state.discard})
+            break;
+          }
           this.setState({
             discard: this.state.discardReferenceArray[(this.state.itemID)-1],
             play1Hand: play1,
@@ -191,9 +229,25 @@ class App extends React.Component {
       }
 
       selectSwapDiscard2 = () => {
+        console.log(this.state.selectIndex);
         if(this.state.p2Turn) {
           let play2 = this.state.play2Hand
           play2.splice(this.state.selectIndex, 1, this.state.discard)
+
+          switch(this.state.selectIndex) {
+            case "0": this.setState({card7: this.state.discard})
+            break;
+            case "1": this.setState({card8: this.state.discard})
+            break;
+            case "2": this.setState({card9: this.state.discard})
+            break;
+            case "3": this.setState({card10: this.state.discard})
+            break;
+            case "4": this.setState({card11: this.state.discard})
+            break;
+            case "5": this.setState({card12: this.state.discard})
+            break;
+          }
           this.setState({
             discard: this.state.discardReferenceArray[(this.state.itemID)-1],
             play2Hand: play2,
@@ -205,8 +259,22 @@ class App extends React.Component {
 
       selectSwapDeck1 = () => {
         if(this.state.p1Turn) {
-          let play1 = this.state.play1Hand
-          play1.splice(this.state.selectIndex, 1, this.state.deckObj)
+          let play1 = this.state.play1Hand;
+          play1.splice(this.state.selectIndex, 1, this.state.deckObj);
+          switch(this.state.selectIndex) {
+            case 0: this.setState({card1: this.state.deckObj})
+            break;
+            case 1: this.setState({card2: this.state.deckObj})
+            break;
+            case 2: this.setState({card3: this.state.deckObj})
+            break;
+            case 3: this.setState({card4: this.state.deckObj})
+            break;
+            case 4: this.setState({card5: this.state.deckObj})
+            break;
+            case 5: this.setState({card6: this.state.deckObj})
+            break;
+          }
           this.setState({
             deckObj: {id: 0},
             discard: this.state.discardReferenceArray[(this.state.itemID)-1],
@@ -218,6 +286,20 @@ class App extends React.Component {
         if(this.state.p2Turn) {
           let play2 = this.state.play2Hand
           play2.splice(this.state.selectIndex, 1, this.state.deckObj)
+          switch(this.state.selectIndex) {
+            case 0: this.setState({card7: this.state.deckObj})
+            break;
+            case 1: this.setState({card8: this.state.deckObj})
+            break;
+            case 2: this.setState({card9: this.state.deckObj})
+            break;
+            case 3: this.setState({card10: this.state.deckObj})
+            break;
+            case 4: this.setState({card11: this.state.deckObj})
+            break;
+            case 5: this.setState({card12: this.state.deckObj})
+            break;
+          }
           this.setState({
             deckObj: {id: 0},
             play2Hand: play2,
@@ -227,8 +309,6 @@ class App extends React.Component {
       }
 
   render() {
-
-    console.log("this.state.p1Wins = " +this.state.p1Wins)
 
   const getCardFromDeck = (item) => {
 
@@ -261,13 +341,30 @@ class App extends React.Component {
     if ((this.state.p1Turn === null && this.state.beginP1Flipped !== 2) || this.state.p1Turn) {
       let cardsFlipped = this.state.beginP1Flipped  
       cardsFlipped++;
-      let targetImgPic = item.target.id % 13 === 0 ? 13 : item.target.id % 13
-      item.target.src=`./images/${targetImgPic}.jpg`
+      let targetImgId = item.target.id % 13 === 0 ? 13 : item.target.id % 13
+      let targetImgCard = item.target.src=`./images/${targetImgId}.jpg`
+      let targetObj = {
+        id: item.target.id,
+        image: targetImgCard
+      }
+      switch(item.target.className) {
+        case 0: this.setState({card1: targetObj})
+        break;
+        case 1: this.setState({card2: targetObj})
+        break;
+        case 2: this.setState({card3: targetObj})
+        break;
+        case 3: this.setState({card4: targetObj})
+        break;
+        case 4: this.setState({card5: targetObj})
+        break;
+        case 5: this.setState({card6: targetObj})
+        break;
+      }
       this.setState({
+
         beginP1Flipped: cardsFlipped,
-        totalP1Flipped: cardsFlipped
-      })
-      this.setState({
+        totalP1Flipped: cardsFlipped,
         selectIndex: item.target.className,
         itemID: item.target.id
       })
@@ -279,15 +376,34 @@ class App extends React.Component {
     if ((this.state.p2Turn === null && this.state.beginP2Flipped !== 2) || this.state.p2Turn) {
       let cardsFlipped = this.state.beginP2Flipped
         cardsFlipped++
-        let targetImgPic = item.target.id % 13 === 0 ? 13 : item.target.id % 13
-        item.target.src=`./images/${targetImgPic}.jpg`
-        this.setState({
-          beginP2Flipped: cardsFlipped,
-          totalP2Flipped: cardsFlipped
-        })
-        this.setState({
-          selectIndex: item.target.className,
-          itemID: item.target.id
+      let targetImgId = item.target.id % 13 === 0 ? 13 : item.target.id % 13
+      let targetImgCard = item.target.src=`./images/${targetImgId}.jpg`
+      let targetObj = {
+        id: item.target.id,
+        image: targetImgCard
+      }
+
+      switch(item.target.className) {
+        case 0: this.setState({card7: targetObj})
+
+        break;
+        case 1: this.setState({card8: targetObj})
+        break;
+        case 2: this.setState({card9: targetObj})
+        break;
+        case 3: this.setState({card10: targetObj})
+        break;
+        case 4: this.setState({card11: targetObj})
+        break;
+        case 5: this.setState({card12: targetObj})
+        break;
+      }
+
+      this.setState({
+        beginP2Flipped: cardsFlipped,
+        totalP2Flipped: cardsFlipped,
+        selectIndex: item.target.className,
+        itemID: item.target.id
       })
     }
   }
@@ -296,22 +412,37 @@ class App extends React.Component {
     let targetImgPic = item.target.id % 13 === 0 ? 13 : item.target.id % 13
     item.target.src=`./images/${targetImgPic}.jpg`
   }
+    let arrayHand1 = [this.state.card1, this.state.card2, this.state.card3, this.state.card4, this.state.card5, this.state.card6];
+    let arrayHand2 = [this.state.card7, this.state.card8, this.state.card9, this.state.card10, this.state.card11, this.state.card12];
+    
+    let playCard1 = <img onClick={player1Click} src={this.state.card1.image} id={this.state.card1.id} className={0}  alt="card"/>
+    let playCard2 = <img onClick={player1Click} src={this.state.card2.image} id={this.state.card2.id} className={1}  alt="card"/>
+    let playCard3 = <img onClick={player1Click} src={this.state.card3.image} id={this.state.card3.id} className={2}  alt="card"/>
+    let playCard4 = <img onClick={player1Click} src={this.state.card4.image} id={this.state.card4.id} className={3}  alt="card"/>
+    let playCard5 = <img onClick={player1Click} src={this.state.card5.image} id={this.state.card5.id} className={4}  alt="card"/>
+    let playCard6 = <img onClick={player1Click} src={this.state.card6.image} id={this.state.card6.id} className={5}  alt="card"/>
+    let playCard7 = <img onClick={player2Click} src={this.state.card7.image} id={this.state.card7.id} className={0}  alt="card"/>
+    let playCard8 = <img onClick={player2Click} src={this.state.card8.image} id={this.state.card8.id} className={1}  alt="card"/>
+    let playCard9 = <img onClick={player2Click} src={this.state.card9.image} id={this.state.card9.id} className={2}  alt="card"/>
+    let playCard10 = <img onClick={player2Click} src={this.state.card10.image} id={this.state.card10.id} className={3}  alt="card"/>
+    let playCard11 = <img onClick={player2Click} src={this.state.card11.image} id={this.state.card11.id} className={4}  alt="card"/>
+    let playCard12 = <img onClick={player2Click} src={this.state.card12.image} id={this.state.card12.id} className={5}  alt="card"/>
 
-    let renderPlay1Hand = this.state.play1Hand.map((card1, index)=>{
-      return <img draggable onClick={player1Click} src={"./images/0.jpg"} id={card1.id} className={index} key={index+10} alt="card" />
+    let renderPlay1Hand = arrayHand1.map((card1, index)=>{
+      return <img onClick={player1Click} src={"./images/0.jpg"} id={card1.id} className={index} key={index+10} alt="card" />
     })
     let play1HandTop = renderPlay1Hand.slice(0,3);
     let play1HandBot = renderPlay1Hand.slice(3);
 
-    let renderPlay2Hand = this.state.play2Hand.map((card2, index)=>{
-      return <img draggable onClick={player2Click} src={"./images/0.jpg"} id={card2.id} className={index} key={index+100} alt="card"/>
+    let renderPlay2Hand = arrayHand2.map((card2, index)=>{
+      return <img onClick={player2Click} src={"./images/0.jpg"} id={card2.id} className={index} key={index+100} alt="card"/>
     })
 
     let play2HandTop = renderPlay2Hand.slice(0,3);
     let play2HandBot = renderPlay2Hand.slice(3);
 
     let deck = <img onClick={getCardFromDeck} src={"./images/0.jpg"} id={this.state.deckCardID} alt="deck" />
-    let discard = <img clickFunc={this.discardPic} src={this.state.discard.image} id={this.state.discard.id} alt="discard"/>
+    let discard = <img src={this.state.discard.image} id={this.state.discard.id} alt="discard"/>
     let cardsOrEnd = this.state.cardArray.length !== 0 ? <h3>{"Amount of cards left in deck: " + this.state.cardArray.length}</h3> : <h3>No more cards.</h3>
     let player1Score = <h3>{"Player 1 Score: " + this.state.p1Total}</h3>
     let player2Score = <h3>{"Player 2 Score " + this.state.p2Total}</h3>
@@ -340,9 +471,9 @@ class App extends React.Component {
       <div>
         
         <div id="cards">
-          <div>{play1HandTop}</div>
+          <div>{playCard1}{playCard2}{playCard3}</div>
           <div id="p1"><h3>P1</h3></div>
-          <div>{play1HandBot}</div>
+          <div>{playCard4}{playCard5}{playCard6}</div>
         
           <Button clickFunc={this.selectSwapDiscard1} buttonName="Swap Discard"/>
           <Button clickFunc={this.selectSwapDeck1} buttonName="Swap Deck"/>
@@ -352,9 +483,9 @@ class App extends React.Component {
           <Button clickFunc={this.selectSwapDiscard2} buttonName="Swap Discard"/>
           <Button clickFunc={this.selectSwapDeck2} buttonName="Swap Deck"/>
 
-          <div>{play2HandTop}</div>
+          <div>{playCard7}{playCard8}{playCard9}</div>
           <div id="p2"><h3>P2</h3></div>
-          <div>{play2HandBot}</div>
+          <div>{playCard10}{playCard11}{playCard12}</div>
 
         </div>
 
