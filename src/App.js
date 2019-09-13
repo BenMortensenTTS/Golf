@@ -512,7 +512,9 @@ class App extends React.Component {
       selectIndex: null,
       itemID: null,
       isImg0: false,
-      didSwapDeck: false
+      didSwapDeck: false,
+      beginP1Flipped: 0,
+      beginP2Flipped: 0
     }
   }
 
@@ -549,7 +551,10 @@ class App extends React.Component {
         }
       })
 
-      discardReference = deckImageArr;
+      for(let i = 0; i < 52; i++) {
+        discardReference[i] = deckImageArr[i];
+      }
+      
       discardIndex = this.randCardIndex(deckImageArr);
       discardObj = deckImageArr.splice(discardIndex,1)[0];
 
@@ -738,7 +743,7 @@ class App extends React.Component {
         itemID: parseInt(item.target.id)
       })
         
-      if (this.state.p1Turn === null && this.state.beginP1Flipped < 3) {
+      if (this.state.p1Turn === null && this.state.beginP1Flipped < 2) {
         item.target.src = this.state.discardReferenceArray[parseInt(item.target.id) - 1].image; 
         this.setState({beginP1Flipped: this.state.beginP1Flipped + 1})
       } 
@@ -750,7 +755,7 @@ class App extends React.Component {
         itemID: parseInt(item.target.id)
       })
 
-      if (this.state.p2Turn === null && this.state.beginP2Flipped !== 2) {
+      if (this.state.p2Turn === null && this.state.beginP2Flipped < 2) {
         item.target.src = this.state.discardReferenceArray[parseInt(item.target.id) - 1].image; 
         this.setState({beginP2Flipped: this.state.beginP2Flipped + 1})
       }
