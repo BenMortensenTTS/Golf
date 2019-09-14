@@ -74,14 +74,15 @@ class App extends React.Component {
         let randCardObj = deckImageArr.splice(randNum,1)[0];
         if(i < 6){
           p1hand[i] = {id: randCardObj.id, image: `./images/0.jpg`, flipped: false};
-          discardReference[randCardObj.id - 1] = p1hand[i];
+          discardReference[randCardObj.id - 1] = {id: randCardObj.id, image: `./images/${randCardObj.id % 13 === 0 ? 13 : randCardObj.id % 13}.jpg`, flipped: false}
         } else if (i < 12){
           p2hand[i-6] = {id: randCardObj.id, image: `./images/0.jpg`, flipped: false};
-          discardReference[randCardObj.id - 1] = p2hand[i-6];
+          discardReference[randCardObj.id - 1] = {id: randCardObj.id, image: `./images/${randCardObj.id % 13 === 0 ? 13 : randCardObj.id % 13}.jpg`, flipped: false}
         } else {
           deckCard = {id: randCardObj.id, image: `./images/0.jpg`};
         }
       }
+      console.log(discardReference);
 
       this.setState({
         play1Hand: p1hand,
@@ -275,7 +276,7 @@ class App extends React.Component {
         }
         if(grabObj.flipped === false) {
           let allow2 = {id: grabObj.id, image: `./images/0.jpg`, flipped: true};
-          item.target.src = this.state.discardReferenceArray[parseInt(item.target.id) - 1].image;
+          item.target.src = `./images/${item.target.id % 13 === 0 ? 13 : item.target.id % 13}.jpg`
           discardArray.splice((parseInt(item.target.id) - 1), 0, allow2) 
           this.setState({
             beginP1Flipped: this.state.beginP1Flipped + 1,
@@ -290,7 +291,7 @@ class App extends React.Component {
         selectIndex: parseInt(item.target.className),
         itemID: parseInt(item.target.id)
       })
-
+      console.log(this.state.beginP2Flipped);
       if (this.state.p2Turn === null && this.state.beginP2Flipped < 2) {
         let discardArray = this.state.discardReferenceArray
         let grabObj = discardArray.splice((parseInt(item.target.id) - 1), 1)[0]
@@ -299,7 +300,7 @@ class App extends React.Component {
         }
         if(grabObj.flipped === false) {
           let allow2 = {id: grabObj.id, image: `./images/0.jpg`, flipped: true};
-          item.target.src = this.state.discardReferenceArray[parseInt(item.target.id) - 1].image; 
+          item.target.src = `./images/${item.target.id % 13 === 0 ? 13 : item.target.id % 13}.jpg`
           discardArray.splice((parseInt(item.target.id) - 1), 0, allow2)
           this.setState({
             beginP2Flipped: this.state.beginP2Flipped + 1,
