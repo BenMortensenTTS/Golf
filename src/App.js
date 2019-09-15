@@ -10,323 +10,431 @@ class App extends React.Component {
       cardArray: [],
       discardReferenceArray: [],
       discard: {},
-      deckObj: {},
-      beginP1Flipped: 0,
-      beginP2Flipped: 0,
+      deckObj: {id: 0, image: `./images/0.jpg`},
       playing: false,
       p1Turn: null,
       p2Turn: null,
-      totalP1Flipped: 0,
-      totalP2Flipped: 0,
       p1Total: 0,
       p2Total: 0,
       p1Wins: 0,
       p2Wins: 0,
       selectIndex: null,
       itemID: null,
-      cardImgIndex: 0
+      beginP1Flipped: 0,
+      beginP2Flipped: 0,
+      isDeckBlank: true,
+      cardType: null,
+      didTakeDeck: false
     }
   }
 
   genDeck=()=>{
     let tempArray = [];
     for(let i = 0; i < 52; i++) {
-      tempArray[i] = i+1;//deck of 52
+      tempArray[i] = i+1;
     }
     return tempArray;
   }
 
-  randCardIndex=(deckArr)=>{
-    return Math.floor(Math.random()*deckArr.length)
-  }
-
-
-  componentDidMount() {
-    let p1Wins = localStorage.getItem('p1Wins')
-    let p2Wins = localStorage.getItem('p2Wins')
-
-
-    let deckIndexArr = this.genDeck();
-    let p1hand = [];
-    let p2hand = [];
-    let cardImageArr = [];
-    let discardObj;
-    let randNum;
-    let discardIndex;
-    let discardReference = [];
-
-    for(let i=1;i<14;i++){
-      cardImageArr[i] = `./images/${i}.jpg`;
+  randCardIndex = (deckArr) => {
+      return Math.floor(Math.random()*deckArr.length)
     }
-    let deckImageArr = deckIndexArr.map((idNum)=>{
+
+    componentDidMount = () => {
+      let p1Wins = localStorage.getItem('p1Wins')
+      let p2Wins = localStorage.getItem('p2Wins')
+      let deckIndexArr = this.genDeck();
+      let p1hand = [];
+      let p2hand = [];
+      let discardObj;
+      let randNum;
+      let discardIndex;
+      let discardReference = [];
+
+      let deckImageArr = deckIndexArr.map((idNum)=>{
       let imgIndex = (idNum%13)===0 ? 13 : idNum%13;
-      return {
-        id:idNum,
-        image: cardImageArr[imgIndex],
+        return {
+          id:idNum,
+          image: `./images/${imgIndex}.jpg`,
+          flipped: true
+        }
+      })
+
+      for(let i = 0; i < 52; i++) {
+        discardReference[i] = deckImageArr[i];
       }
-    })
-    for (let i = 0; i < 52; i++) {
-      discardReference[i] = deckImageArr[i];
-    }
-
-    discardIndex = this.randCardIndex(deckImageArr);
-    discardObj = deckImageArr.splice(discardIndex,1)[0];
-
-    for(let i=0;i<12;i++){
-      randNum = this.randCardIndex(deckImageArr);
       
-      let randCardObj = deckImageArr.splice(randNum,1)[0];
-      if(i < 6){
-        p1hand[i] = randCardObj;
-      } else {
-        p2hand[i-6] = randCardObj;
-      }
-    }
-    this.setState({
-      play1Hand: p1hand,
-      play2Hand: p2hand,
-      cardArray: deckImageArr,
-      discardReferenceArray: discardReference,
-      discard: discardObj,
-      p1Wins,
-      p2Wins
-    })
-  }
+      discardIndex = this.randCardIndex(deckImageArr);
+      discardObj = deckImageArr.splice(discardIndex,1)[0];
 
-  startGame = () => {
-    if (this.state.beginP1Flipped === 2 && this.state.beginP2Flipped === 2 && this.state.playing === false) {
-      let turn = (Math.floor(Math.random() * 2)) === 0 ? true : false
-      this.setState({
-        p1Turn: turn,
-        p2Turn: !turn,
-        playing: true
-      }, ()=>{
-        this.state.p1Turn ? console.log("Player 1 goes first.") : console.log("Player 2 goes first.")
-      })
-    }
-  }
-
-  calculateScore = (item) => {
-    if(this.state.playing) {
-      let state = this.state;
-      let total1 = 0;
-      let total2 = 0;
-
-      for(let i = 0; i < 3; i++) {
-        if(state.play1Hand[i].id % 13 === state.play1Hand[i+3].id % 13) {
-          total1 += 0;
-        } else {
-          total1 += (state.play1Hand[i].id % 13) + (state.play1Hand[i+3].id % 13)
-        }
-        if(state.play2Hand[i].id % 13 === state.play2Hand[i+3].id % 13) {
-          total2 += 0;
-        } else {
-          total2 += (state.play2Hand[i].id % 13) + (state.play2Hand[i+3].id % 13)
-        }
+      for(let i=0;i<12;i++){
+        randNum = this.randCardIndex(deckImageArr);
+        let randCardObj = deckImageArr.splice(randNum,1)[0];
+        if(i < 6){
+          p1hand[i] = {id: randCardObj.id, image: `./images/0.jpg`, flipped: false};
+          discardReference[randCardObj.id - 1] = {id: randCardObj.id, image: `./images/${randCardObj.id % 13 === 0 ? 13 : randCardObj.id % 13}.jpg`, flipped: false}
+        } else if (i < 12){
+          p2hand[i-6] = {id: randCardObj.id, image: `./images/0.jpg`, flipped: false};
+          discardReference[randCardObj.id - 1] = {id: randCardObj.id, image: `./images/${randCardObj.id % 13 === 0 ? 13 : randCardObj.id % 13}.jpg`, flipped: false}
+        } 
       }
 
       this.setState({
-        p1Total: total1,
-        p2Total: total2,
-        playing: false
-      })
-
-     if (total2 > total1) {
-      let curr = parseInt(this.state.p2Wins) + 1
-      this.setState({p2Wins: curr}, () => {
-        if(parseInt(this.state.p2Wins) > 8) {
-          localStorage.setItem('p2Wins', 0);
-          localStorage.setItem('p1Wins', 0);
-          this.setState({p2Wins: 0})
-          this.setState({p1Wins: 0})
-        } else {
-          localStorage.setItem('p2Wins', curr);
-        }
+        play1Hand: p1hand,
+        play2Hand: p2hand,
+        cardArray: deckImageArr,
+        discardReferenceArray: discardReference,
+        discard: discardObj,
+        p1Wins: p1Wins,
+        p2Wins: p2Wins,
       })
     }
 
-      else if (total1 > total2) {
-        let curr = parseInt(this.state.p1Wins) + 1
-        this.setState({p1Wins: curr}, () => {
-          localStorage.setItem('p1Wins', curr);
-          if(parseInt(this.state.p1Wins) > 8) {
-            localStorage.setItem('p1Wins', 0);
-            localStorage.setItem('p2Wins', 0);
-            this.setState({p1Wins: 0})
-            this.setState({p2Wins: 0})
-          }
+    startGame = () => {
+      if (this.state.beginP1Flipped === 2 && this.state.beginP2Flipped === 2 && this.state.playing === false) {
+        let turn = (Math.floor(Math.random() * 2)) === 0 ? true : false
+        this.setState({
+          playing: true,
+          p1Turn: turn,
+          p2Turn: !turn,
+        }, ()=>{
+          this.state.p1Turn ? console.log("Player 1 goes first.") : console.log("Player 2 goes first.")
         })
       }
     }
+
+    calculateScore = () => {
+      if(this.state.playing) {
+        let total1 = 0;
+        let total2 = 0;
+
+        for(let i = 0; i < 3; i++) {
+            if(this.state.play1Hand[i].id % 13 === this.state.play1Hand[i+3].id % 13) {
+              total1 += 0;
+            } else {
+              total1 += (this.state.play1Hand[i].id % 13) + (this.state.play1Hand[i+3].id % 13)
+            }
+            if(this.state.play2Hand[i].id % 13 === this.state.play2Hand[i+3].id % 13) {
+              total2 += 0;
+            } else {
+              total2 += (this.state.play2Hand[i].id % 13) + (this.state.play2Hand[i+3].id % 13)
+            }
+        }
+
+        this.setState({
+          p1Total: total1,
+          p2Total: total2,
+          playing: false
+        })
+
+        if (total2 < total1) {
+          let curr = parseInt(this.state.p2Wins) + 1
+          this.setState({p2Wins: curr}, () => {
+            if(parseInt(this.state.p2Wins) > 8) {
+              localStorage.setItem('p2Wins', 0);
+              localStorage.setItem('p1Wins', 0);
+              this.setState({p2Wins: 0})
+              this.setState({p1Wins: 0})
+            } else {
+              localStorage.setItem('p2Wins', curr);
+            }
+          })
+        }
+
+        else if (total1 < total2) {
+          let curr = parseInt(this.state.p1Wins) + 1
+          this.setState({p1Wins: curr}, () => {
+            localStorage.setItem('p1Wins', curr);
+            if(parseInt(this.state.p1Wins) > 8) {
+              localStorage.setItem('p1Wins', 0);
+              localStorage.setItem('p2Wins', 0);
+              this.setState({p1Wins: 0})
+              this.setState({p2Wins: 0})
+            } else {
+              localStorage.setItem('p1Wins', curr);
+            }
+          })
+        }
+      }
+    }
+
+    clearWins = () => {
+      this.setState({p1Wins: 0})
+      this.setState({p2Wins: 0})
+      localStorage.setItem("p1Wins", 0)
+      localStorage.setItem("p2Wins", 0)
   }
 
-  clearWins = () => {
-    this.setState({p1Wins: 0})
-    this.setState({p2Wins: 0})
-    localStorage.setItem("p1Wins", 0)
-    localStorage.setItem("p2Wins", 0)
-}
-
-
-      selectSwapDiscard1 = () => {
+  selectSwapDiscard1 = () => {
+      if(!this.state.didTakeDeck && this.state.deckObj.id === 0 && this.state.p1Turn) {
         let play1 = this.state.play1Hand
         play1.splice(this.state.selectIndex, 1, this.state.discard)
-        console.log(play1)
         this.setState({
           discard: this.state.discardReferenceArray[(this.state.itemID)-1],
-          play1Hand: play1
+          play1Hand: play1,
+          p1Turn: !this.state.p1Turn,
+          p2Turn: !this.state.p2Turn
         })
       }
 
-      selectSwapDiscard2 = () => {
+      let checkIfHand1Flipped = this.state.play1Hand;
+      let count = 0;
+
+      for(let i = 0; i < checkIfHand1Flipped.length; i++) {
+        if(checkIfHand1Flipped[i].flipped) {
+          count++;
+          console.log(count);
+        }
+      }
+
+      if(count === 6) {
+        console.log("Trigger");
+        this.calculateScore();
+      }
+    }
+
+    selectSwapDiscard2 = () => {
+      if(this.state.p2Turn && this.state.deckObj.id === 0 && !this.state.didTakeDeck) {
         let play2 = this.state.play2Hand
         play2.splice(this.state.selectIndex, 1, this.state.discard)
         this.setState({
           discard: this.state.discardReferenceArray[(this.state.itemID)-1],
-          play2Hand: play2
+          play2Hand: play2,
+          p1Turn: !this.state.p1Turn,
+          p2Turn: !this.state.p2Turn
         })
       }
 
-      selectSwapDeck1 = () => {
-        let play1 = this.state.play1Hand
-        play1.splice(this.state.selectIndex, 1, this.state.deckObj)
+      let checkIfHand2Flipped = this.state.play2Hand;
+      let count = 0;
+
+      for(let i = 0; i < checkIfHand2Flipped.length; i++) {
+        if(checkIfHand2Flipped[i].flipped) {
+          count++;
+          console.log(count);
+        }
+      }
+
+      if(count === 6) {
+        console.log("Trigger");
+        this.calculateScore();
+      }
+    }
+
+    selectSwapDeck1 = () => {
+      if(this.state.p1Turn && this.state.deckObj.id !== 0 && this.state.cardType !== "deck") {
+        let play1 = this.state.play1Hand;
+        play1.splice(this.state.selectIndex, 1, this.state.deckObj);
         this.setState({
-          deckObj: {id: 0},
+          deckObj: {id: 0, image: `./images/0.jpg`},
           discard: this.state.discardReferenceArray[(this.state.itemID)-1],
-          play1Hand: play1
+          play1Hand: play1,
+          p1Turn: !this.state.p1Turn,
+          p2Turn: !this.state.p2Turn,
+          didTakeDeck: false
         })
+      }
+
+      let checkIfHand1Flipped = this.state.play1Hand;
+      let count = 0;
+      
+      for(let i = 0; i < checkIfHand1Flipped.length; i++) {
+        if(checkIfHand1Flipped[i].flipped) {
+          count++;
+          console.log(count);
+        }
+      }
+
+      if(count === 6) {
+        this.calculateScore();
+        console.log("Trigger");
+        console.log(this.state.total1)
+        console.log(this.state.total2)
 
       }
-      selectSwapDeck2 = () => {
-       let play2 = this.state.play2Hand
+    
+    }
+
+    selectSwapDeck2 = () => {
+      if(this.state.p2Turn && this.state.deckObj.id !== 0 && this.state.cardType !== "deck") {
+        let play2 = this.state.play2Hand
         play2.splice(this.state.selectIndex, 1, this.state.deckObj)
         this.setState({
-          deckObj: {id: 0},
+          deckObj: {id: 0, image: `./images/0.jpg`},
           play2Hand: play2,
-          discard: this.state.discardReferenceArray[(this.state.itemID)-1]
+          discard: this.state.discardReferenceArray[(this.state.itemID)-1],
+          p1Turn: !this.state.p1Turn,
+          p2Turn: !this.state.p2Turn,
+          didTakeDeck: false
         })
       }
+
+      let checkIfHand2Flipped = this.state.play2Hand;
+      let count = 0;
+
+     for(let i = 0; i < checkIfHand2Flipped.length; i++) {
+        if(checkIfHand2Flipped[i].flipped) {
+          count++;
+          console.log(count);
+        }
+      }
+      
+      if(count === 6) {
+        console.log("Trigger");
+        this.calculateScore();
+      }
+    }
 
   render() {
 
-  const getCardFromDeck = (item) => {
+    const getCardFromDeck = (item) => {
+      if(this.state.deckObj.id !== 0 && this.state.playing) {
+          this.setState({discard: this.state.deckObj})
+          item.target.src = `./images/0.jpg`
+          this.setState({
+            deckObj: {id: 0, image: `./images/0.jpg`},
+            p1Turn: !this.state.p1Turn,
+            p2Turn: !this.state.p2Turn,
+            didTakeDeck: false
+          })
+        }
+      
 
-    if(this.state.cardImgIndex !== 0) {
-      item.target.src = `./images/0.jpg`
-      this.setState({cardImgIndex: 0})
+      if(this.state.playing && this.state.cardArray.length > 0 && this.state.deckObj.id === 0) {
+        let temp = this.state.cardArray
+        let card = temp.splice(this.randCardIndex(temp), 1)[0];
+        item.target.src = card.image
+        this.setState({
+          cardArray: temp,
+          deckObj: card,
+          cardType: item.target.alt,
+          didTakeDeck: true
+        })
+      } 
     }
-    
-    if(this.state.playing && this.state.cardArray.length > 0 && this.state.cardImgIndex === 0) {
-      let temp = this.state.cardArray
-      let card = temp.splice(this.randCardIndex(temp), 1)[0];
-      let cardObj = card
-      card = card.id % 13 === 0 ? 13 : card.id % 13
-      item.target.src = `./images/${card}.jpg`
+
+    const player1Click = (item) => {
       this.setState({
-        cardArray: temp,
-        deckObj: cardObj,
-        cardImgIndex: card
+        selectIndex: parseInt(item.target.className),
+        itemID: parseInt(item.target.id),
+        cardType: item.target.alt
       })
-    } else {
-      item.target.src = `./images/0.jpg`
+      if (this.state.p1Turn === null && this.state.beginP1Flipped < 2) {
+        let discardArray = this.state.discardReferenceArray
+        let grabObj = discardArray.splice((parseInt(item.target.id) - 1), 1)[0]
+        if(grabObj.flipped) {
+          discardArray.splice((parseInt(item.target.id) - 1), 0, grabObj)
+        } 
+        else {
+          let updateHand1 = this.state.play1Hand;
+          let allow2 = {id: grabObj.id, image: `./images/${item.target.id % 13 === 0 ? 13 : item.target.id % 13}.jpg`, flipped: true};
+          updateHand1.splice(parseInt(item.target.className), 1, allow2);
+          item.target.src = `./images/${item.target.id % 13 === 0 ? 13 : item.target.id % 13}.jpg`
+          discardArray.splice((parseInt(item.target.id) - 1), 0, allow2) 
+          this.setState({
+            beginP1Flipped: this.state.beginP1Flipped + 1,
+            discardReferenceArray: discardArray,
+            play1Hand: updateHand1
+          })
+        }
+      }
+
+      if (!this.state.discard.flipped) {
+        let flipDiscard = this.state.discard;
+        let newObj = {id: flipDiscard.id, image: `./images/${flipDiscard.id % 13 === 0 ? 13 : flipDiscard.id % 13}.jpg`, flipped: true}
+        this.setState({discard: newObj});
+      } 
     }
-  }
 
-  const player1Click = (item) => {
-    let cardsFlipped = this.state.beginP1Flipped
-    console.log(item.target.id)
-  
-      cardsFlipped++;
-      let targetImgPic = item.target.id % 13 === 0 ? 13 : item.target.id % 13
-      item.target.src=`./images/${targetImgPic}.jpg`
+    const player2Click = (item) => {
       this.setState({
-        beginP1Flipped: cardsFlipped,
-        totalP1Flipped: cardsFlipped
+        selectIndex: parseInt(item.target.className),
+        itemID: parseInt(item.target.id),
+        cardType: item.target.alt
       })
-    
-    this.setState({
-      selectIndex: item.target.className,
-      itemID: item.target.id
-    })
-  }
-
-  const player2Click = (item) => {
-    let cardsFlipped = this.state.beginP2Flipped
-   
-      cardsFlipped++
-      let targetImgPic = item.target.id % 13 === 0 ? 13 : item.target.id % 13
-      item.target.src=`./images/${targetImgPic}.jpg`
-      this.setState({
-        beginP2Flipped: cardsFlipped,
-        totalP2Flipped: cardsFlipped
-      })
-    
-    this.setState({
-      selectIndex: item.target.className,
-      itemID: item.target.id
-    })
-  }
-
-  const discardPic = (item) => {
-    let targetImgPic = item.target.id % 13 === 0 ? 13 : item.target.id % 13
-    item.target.src=`./images/${targetImgPic}.jpg`
-  }
+      if (this.state.p2Turn === null && this.state.beginP2Flipped < 2) {
+        let discardArray = this.state.discardReferenceArray
+        let grabObj = discardArray.splice((parseInt(item.target.id) - 1), 1)[0]
+        if(grabObj.flipped) {
+          discardArray.splice((parseInt(item.target.id) - 1), 0, grabObj)
+        }
+        if(grabObj.flipped === false) {
+          let updateHand2 = this.state.play2Hand;
+          let allow2 = {id: grabObj.id, image: `./images/${item.target.id % 13 === 0 ? 13 : item.target.id % 13}.jpg`, flipped: true};
+          updateHand2.splice(parseInt(item.target.className), 1, allow2);
+          item.target.src = `./images/${item.target.id % 13 === 0 ? 13 : item.target.id % 13}.jpg`
+          discardArray.splice((parseInt(item.target.id) - 1), 0, allow2)
+          this.setState({
+            beginP2Flipped: this.state.beginP2Flipped + 1,
+            discardReferenceArray: discardArray,
+            play2Hand: updateHand2
+          })
+        }
+      }
+      if (!this.state.discard.flipped) {
+        let flipDiscard = this.state.discard;
+        let newObj = {id: flipDiscard.id, image: `./images/${flipDiscard.id % 13 === 0 ? 13 : flipDiscard.id % 13}.jpg`, flipped: true}
+        this.setState({discard: newObj});
+      } 
+    }
 
     let renderPlay1Hand = this.state.play1Hand.map((card1, index)=>{
-      return <img draggable onClick={player1Click} src={"./images/0.jpg"} id={card1.id} className={index} key={index+10} alt="card" />
+        return <img onClick={player1Click} src={card1.image} id={card1.id} className={index} key={index+10} alt="card" />
     })
     let play1HandTop = renderPlay1Hand.slice(0,3);
     let play1HandBot = renderPlay1Hand.slice(3);
 
     let renderPlay2Hand = this.state.play2Hand.map((card2, index)=>{
-      return <img draggable="true" onClick={player2Click} src={"./images/0.jpg"} id={card2.id} className={index} key={index+100} alt="card"/>
+      return <img onClick={player2Click} src={card2.image} id={card2.id} className={index} key={index+100} alt="card"/>
     })
-
     let play2HandTop = renderPlay2Hand.slice(0,3);
     let play2HandBot = renderPlay2Hand.slice(3);
 
-    let deck = <img onClick={getCardFromDeck} src={"./images/0.jpg"} id={this.state.deckCardID} alt="deck" />
-    let discard = <img clickFunc={this.discardPic} src={this.state.discard.image} id={this.state.discard.id} alt="discard"/>
+    let deck = <img onClick={getCardFromDeck} src={this.state.deckObj.image} id={this.state.deckObj.id} alt="deck" />
+    let discard = <img src={this.state.discard.image} id={this.state.discard.id} alt="discard"/>
     let cardsOrEnd = this.state.cardArray.length !== 0 ? <h3>{"Amount of cards left in deck: " + this.state.cardArray.length}</h3> : <h3>No more cards.</h3>
     let player1Score = <h3>{"Player 1 Score: " + this.state.p1Total}</h3>
     let player2Score = <h3>{"Player 2 Score " + this.state.p2Total}</h3>
-    let winner;
     let p1Wins = <h3>{"Player 1 Wins: " + this.state.p1Wins}</h3>
     let p2Wins = <h3>{"Player 2 Wins: " + this.state.p2Wins}</h3>
+    let turn, winner;
+   
+    if(this.state.p1Turn) {
+      turn = <h3>{"Turn: P1"}</h3>
+    } else if (this.state.p2Turn) {
+      turn = <h3>{"Turn: P2"}</h3>
+    }
 
-    if(this.state.p1Total > this.state.p2Total) {
+    if(this.state.p1Total < this.state.p2Total) {
       winner = <h3>{"The Winner is Player 1!"}</h3>
-    } else if (this.state.p2Total > this.state.p1Total) {
+    } else if (this.state.p2Total < this.state.p1Total) {
       winner = <h3>{"The Winner is Player 2!"}</h3>
     } else if (this.state.p1Total !== 0 && this.state.p2Total === this.state.p1Total) {
       winner = <h3>{"This was a tie!"}</h3>
-    } else {
-      winner = <h3></h3>
-    }
+    } 
 
-    return (
+    return(
       <div>
-        <div id="cards">
+        <div id="game">
           <div>{play1HandTop}</div>
+          <div id="p1"><h3>P1</h3></div>
           <div>{play1HandBot}</div>
-        
+
           <Button clickFunc={this.selectSwapDiscard1} buttonName="Swap Discard"/>
           <Button clickFunc={this.selectSwapDeck1} buttonName="Swap Deck"/>
 
+          <div id="turn">{turn}</div>
           <div><span className="spanMove">{discard}</span><span className="spanMove">{deck}</span></div>
-          
+
           <Button clickFunc={this.selectSwapDiscard2} buttonName="Swap Discard"/>
           <Button clickFunc={this.selectSwapDeck2} buttonName="Swap Deck"/>
 
           <div>{play2HandTop}</div>
+          <div id="p2"><h3>P2</h3></div>
           <div>{play2HandBot}</div>
-
         </div>
-
         <div id="info">
-          
           <Button clickFunc={this.startGame} buttonName="Start Game"/>
-          <Button clickFunc={this.calculateScore} buttonName="Calculate Score"/> 
           <Button clickFunc={this.clearWins} buttonName="Clear Wins"/>
 
           <div>{cardsOrEnd}</div>
@@ -335,13 +443,11 @@ class App extends React.Component {
 
           <div>{winner}</div> 
           <div id="wins"><span>{p1Wins}{p2Wins}</span></div>
-
         </div>
       </div>
-    );
+    )
   }
 }
-
 
 const Button = (props) => {
   
@@ -349,17 +455,3 @@ const Button = (props) => {
 }
 
 export default App;
-
-
-// <div id="mainDiv">
-//         <h3>{"Amount of cards left in deck: " + this.state.cardArray.length}</h3>
-//          <div> 
-          // <div>{renderPlay1Hand}</div>
-//            <h3>RandomText1</h3>
-//            <Button clickFunc={this.getRandNum} buttonName="Draw Deck"></Button>
-//            <Button clickFunc={this.swapCards} buttonName="Swap" />
-//            <Button clickFunc={this.startGame} buttonName="Start Game"/>
-//            <h3>RandomText2</h3>
-//            <div>{renderPlay2Hand}</div>
-//          </div>
-//        </div>
