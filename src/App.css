@@ -39,6 +39,34 @@ img {
 	position: absolute;
 	margin-left: 66%;
 }
+<<<<<<< HEAD
+=======
+
+@media (max-width: 760px){
+	#p2 {
+	position: absolute;
+	margin-left: 83%;
+	}
+}
+
+@media (max-width: 760px) {
+	#turn {
+	margin-left: 4%;
+	margin-top: 4%;
+	float: left;
+	position: absolute;
+	}
+}
+
+@media (max-width: 760px) {
+	#p1 {
+	position: absolute;
+	margin-left: 83%;
+	}
+}
+
+
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
 
 @media (max-width: 760px){
 	#p2 {

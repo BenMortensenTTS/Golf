@@ -10,7 +10,11 @@ class App extends React.Component {
       cardArray: [],
       discardReferenceArray: [],
       discard: {},
+<<<<<<< HEAD
       deckObj: {id: 0, image: `./images/0.jpg`},
+=======
+      deckObj: {},
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
       playing: false,
       p1Turn: null,
       p2Turn: null,
@@ -20,11 +24,18 @@ class App extends React.Component {
       p2Wins: 0,
       selectIndex: null,
       itemID: null,
+<<<<<<< HEAD
       beginP1Flipped: 0,
       beginP2Flipped: 0,
       isDeckBlank: true,
       cardType: null,
       didTakeDeck: false
+=======
+      didSwapDeck: false,
+      beginP1Flipped: 0,
+      beginP2Flipped: 0,
+      isDeckBlank: true
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
     }
   }
 
@@ -50,6 +61,10 @@ class App extends React.Component {
       let randNum;
       let discardIndex;
       let discardReference = [];
+<<<<<<< HEAD
+=======
+      let deckCard;
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
 
       let deckImageArr = deckIndexArr.map((idNum)=>{
       let imgIndex = (idNum%13)===0 ? 13 : idNum%13;
@@ -67,7 +82,11 @@ class App extends React.Component {
       discardIndex = this.randCardIndex(deckImageArr);
       discardObj = deckImageArr.splice(discardIndex,1)[0];
 
+<<<<<<< HEAD
       for(let i=0;i<12;i++){
+=======
+      for(let i=0;i<13;i++){
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
         randNum = this.randCardIndex(deckImageArr);
         let randCardObj = deckImageArr.splice(randNum,1)[0];
         if(i < 6){
@@ -76,7 +95,13 @@ class App extends React.Component {
         } else if (i < 12){
           p2hand[i-6] = {id: randCardObj.id, image: `./images/0.jpg`, flipped: false};
           discardReference[randCardObj.id - 1] = {id: randCardObj.id, image: `./images/${randCardObj.id % 13 === 0 ? 13 : randCardObj.id % 13}.jpg`, flipped: false}
+<<<<<<< HEAD
         } 
+=======
+        } else {
+          deckCard = {id: randCardObj.id, image: `./images/0.jpg`};
+        }
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
       }
 
       this.setState({
@@ -87,6 +112,10 @@ class App extends React.Component {
         discard: discardObj,
         p1Wins: p1Wins,
         p2Wins: p2Wins,
+<<<<<<< HEAD
+=======
+        deckObj: deckCard
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
       })
     }
 
@@ -102,6 +131,7 @@ class App extends React.Component {
         })
       }
     }
+<<<<<<< HEAD
 
     calculateScore = () => {
       if(this.state.playing) {
@@ -141,6 +171,47 @@ class App extends React.Component {
           })
         }
 
+=======
+
+    calculateScore = () => {
+      if(this.state.playing) {
+        let total1 = 0;
+        let total2 = 0;
+
+        for(let i = 0; i < 3; i++) {
+            if(this.state.play1Hand[i].id % 13 === this.state.play1Hand[i+3].id % 13) {
+              total1 += 0;
+            } else {
+              total1 += (this.state.play1Hand[i].id % 13) + (this.state.play1Hand[i+3].id % 13)
+            }
+            if(this.state.play2Hand[i].id % 13 === this.state.play2Hand[i+3].id % 13) {
+              total2 += 0;
+            } else {
+              total2 += (this.state.play2Hand[i].id % 13) + (this.state.play2Hand[i+3].id % 13)
+            }
+        }
+
+        this.setState({
+          p1Total: total1,
+          p2Total: total2,
+          playing: false
+        })
+
+        if (total2 < total1) {
+          let curr = parseInt(this.state.p2Wins) + 1
+          this.setState({p2Wins: curr}, () => {
+            if(parseInt(this.state.p2Wins) > 8) {
+              localStorage.setItem('p2Wins', 0);
+              localStorage.setItem('p1Wins', 0);
+              this.setState({p2Wins: 0})
+              this.setState({p1Wins: 0})
+            } else {
+              localStorage.setItem('p2Wins', curr);
+            }
+          })
+        }
+
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
         else if (total1 < total2) {
           let curr = parseInt(this.state.p1Wins) + 1
           this.setState({p1Wins: curr}, () => {
@@ -166,9 +237,16 @@ class App extends React.Component {
   }
 
   selectSwapDiscard1 = () => {
+<<<<<<< HEAD
       if(!this.state.didTakeDeck && this.state.deckObj.id === 0 && this.state.p1Turn) {
         let play1 = this.state.play1Hand
         play1.splice(this.state.selectIndex, 1, this.state.discard)
+=======
+      if(this.state.p1Turn) {
+        let play1 = this.state.play1Hand
+        play1.splice(this.state.selectIndex, 1, this.state.discard)
+        console.log(this.state.discardReferenceArray[(this.state.itemID)-1])
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
         this.setState({
           discard: this.state.discardReferenceArray[(this.state.itemID)-1],
           play1Hand: play1,
@@ -179,6 +257,7 @@ class App extends React.Component {
 
       let checkIfHand1Flipped = this.state.play1Hand;
       let count = 0;
+<<<<<<< HEAD
 
       for(let i = 0; i < checkIfHand1Flipped.length; i++) {
         if(checkIfHand1Flipped[i].flipped) {
@@ -189,14 +268,27 @@ class App extends React.Component {
 
       if(count === 6) {
         console.log("Trigger");
+=======
+      for (let i = 0; i < checkIfHand1Flipped.length; i++) {
+        if (checkIfHand1Flipped[i].flipped) {
+          count++
+        }
+      }
+      if(count === 6) {
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
         this.calculateScore();
       }
     }
 
     selectSwapDiscard2 = () => {
+<<<<<<< HEAD
       if(this.state.p2Turn && this.state.deckObj.id === 0 && !this.state.didTakeDeck) {
+=======
+      if(this.state.p2Turn) {
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
         let play2 = this.state.play2Hand
         play2.splice(this.state.selectIndex, 1, this.state.discard)
+        console.log(this.state.discardReferenceArray[(this.state.itemID)-1])
         this.setState({
           discard: this.state.discardReferenceArray[(this.state.itemID)-1],
           play2Hand: play2,
@@ -207,6 +299,7 @@ class App extends React.Component {
 
       let checkIfHand2Flipped = this.state.play2Hand;
       let count = 0;
+<<<<<<< HEAD
 
       for(let i = 0; i < checkIfHand2Flipped.length; i++) {
         if(checkIfHand2Flipped[i].flipped) {
@@ -217,18 +310,31 @@ class App extends React.Component {
 
       if(count === 6) {
         console.log("Trigger");
+=======
+      for (let i = 0; i < checkIfHand2Flipped.length; i++) {
+        if (checkIfHand2Flipped[i].flipped) {
+          count++
+        }
+      }
+      if(count === 6) {
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
         this.calculateScore();
       }
     }
 
     selectSwapDeck1 = () => {
+<<<<<<< HEAD
       if(this.state.p1Turn && this.state.deckObj.id !== 0 && this.state.cardType !== "deck") {
+=======
+      if(this.state.p1Turn && this.state.deckObj.id !== 0) {
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
         let play1 = this.state.play1Hand;
         play1.splice(this.state.selectIndex, 1, this.state.deckObj);
         this.setState({
           deckObj: {id: 0, image: `./images/0.jpg`},
           discard: this.state.discardReferenceArray[(this.state.itemID)-1],
           play1Hand: play1,
+<<<<<<< HEAD
           p1Turn: !this.state.p1Turn,
           p2Turn: !this.state.p2Turn,
           didTakeDeck: false
@@ -250,27 +356,61 @@ class App extends React.Component {
         console.log("Trigger");
         console.log(this.state.total1)
         console.log(this.state.total2)
+=======
+          didSwapDeck: true,
+          p1Turn: !this.state.p1Turn,
+          p2Turn: !this.state.p2Turn
+        })
+      }
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
+
+      let checkIfHand1Flipped = this.state.play1Hand;
+      let count = 0;
+      for (let i = 0; i < checkIfHand1Flipped.length; i++) {
+        if (checkIfHand1Flipped[i].flipped) {
+          count++
+          console.log(count);
+        }
+      }
+<<<<<<< HEAD
+=======
+      if(count === 6) {
+        this.calculateScore();
+        console.log(this.state.total1)
+        console.log(this.state.total2)
 
       }
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
     
     }
 
     selectSwapDeck2 = () => {
+<<<<<<< HEAD
       if(this.state.p2Turn && this.state.deckObj.id !== 0 && this.state.cardType !== "deck") {
+=======
+      if(this.state.p2Turn && this.state.deckObj.id !== 0) {
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
         let play2 = this.state.play2Hand
         play2.splice(this.state.selectIndex, 1, this.state.deckObj)
         this.setState({
           deckObj: {id: 0, image: `./images/0.jpg`},
           play2Hand: play2,
           discard: this.state.discardReferenceArray[(this.state.itemID)-1],
+<<<<<<< HEAD
           p1Turn: !this.state.p1Turn,
           p2Turn: !this.state.p2Turn,
           didTakeDeck: false
+=======
+          didSwapDeck: true,
+          p1Turn: !this.state.p1Turn,
+          p2Turn: !this.state.p2Turn
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
         })
       }
 
       let checkIfHand2Flipped = this.state.play2Hand;
       let count = 0;
+<<<<<<< HEAD
 
      for(let i = 0; i < checkIfHand2Flipped.length; i++) {
         if(checkIfHand2Flipped[i].flipped) {
@@ -281,6 +421,14 @@ class App extends React.Component {
       
       if(count === 6) {
         console.log("Trigger");
+=======
+      for (let i = 0; i < checkIfHand2Flipped.length; i++) {
+        if (checkIfHand2Flipped[i].flipped) {
+          count++
+        }
+      }
+      if(count === 6) {
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
         this.calculateScore();
       }
     }
@@ -289,26 +437,52 @@ class App extends React.Component {
 
     const getCardFromDeck = (item) => {
       if(this.state.deckObj.id !== 0 && this.state.playing) {
+<<<<<<< HEAD
+=======
+        let temp = this.state.deckObj.id;
+        if(this.state.cardArray.length === 38 && this.state.isDeckBlank) {
+          
+          this.setState({
+            isDeckBlank: false,
+            deckObj: {id: temp, image: `./images/${temp % 13 === 0 ? 13 : temp % 13}.jpg`}
+          });
+          item.target.src = `./images/${ temp % 13 === 0 ? 13 : temp % 13}.jpg`
+        } 
+        else {
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
           this.setState({discard: this.state.deckObj})
           item.target.src = `./images/0.jpg`
           this.setState({
             deckObj: {id: 0, image: `./images/0.jpg`},
             p1Turn: !this.state.p1Turn,
             p2Turn: !this.state.p2Turn,
+<<<<<<< HEAD
             didTakeDeck: false
           })
         }
       
 
       if(this.state.playing && this.state.cardArray.length > 0 && this.state.deckObj.id === 0) {
+=======
+            didSwapDeck: false,
+          })
+        }
+      } 
+
+      else if(this.state.playing && this.state.cardArray.length > 0 && this.state.deckObj.id === 0) {
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
         let temp = this.state.cardArray
         let card = temp.splice(this.randCardIndex(temp), 1)[0];
         item.target.src = card.image
         this.setState({
           cardArray: temp,
+<<<<<<< HEAD
           deckObj: card,
           cardType: item.target.alt,
           didTakeDeck: true
+=======
+          deckObj: card
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
         })
       } 
     }
@@ -316,23 +490,34 @@ class App extends React.Component {
     const player1Click = (item) => {
       this.setState({
         selectIndex: parseInt(item.target.className),
+<<<<<<< HEAD
         itemID: parseInt(item.target.id),
         cardType: item.target.alt
+=======
+        itemID: parseInt(item.target.id)
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
       })
       if (this.state.p1Turn === null && this.state.beginP1Flipped < 2) {
         let discardArray = this.state.discardReferenceArray
         let grabObj = discardArray.splice((parseInt(item.target.id) - 1), 1)[0]
         if(grabObj.flipped) {
           discardArray.splice((parseInt(item.target.id) - 1), 0, grabObj)
+<<<<<<< HEAD
         } 
         else {
           let updateHand1 = this.state.play1Hand;
           let allow2 = {id: grabObj.id, image: `./images/${item.target.id % 13 === 0 ? 13 : item.target.id % 13}.jpg`, flipped: true};
           updateHand1.splice(parseInt(item.target.className), 1, allow2);
+=======
+        }
+        if(grabObj.flipped === false) {
+          let allow2 = {id: grabObj.id, image: `./images/${item.target.id % 13 === 0 ? 13 : item.target.id % 13}.jpg`, flipped: true};
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
           item.target.src = `./images/${item.target.id % 13 === 0 ? 13 : item.target.id % 13}.jpg`
           discardArray.splice((parseInt(item.target.id) - 1), 0, allow2) 
           this.setState({
             beginP1Flipped: this.state.beginP1Flipped + 1,
+<<<<<<< HEAD
             discardReferenceArray: discardArray,
             play1Hand: updateHand1
           })
@@ -351,6 +536,18 @@ class App extends React.Component {
         selectIndex: parseInt(item.target.className),
         itemID: parseInt(item.target.id),
         cardType: item.target.alt
+=======
+            discardReferenceArray: discardArray
+          })
+        }
+      } 
+    }
+
+    const player2Click = (item) => {
+      this.setState({
+        selectIndex: parseInt(item.target.className),
+        itemID: parseInt(item.target.id)
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
       })
       if (this.state.p2Turn === null && this.state.beginP2Flipped < 2) {
         let discardArray = this.state.discardReferenceArray
@@ -359,13 +556,18 @@ class App extends React.Component {
           discardArray.splice((parseInt(item.target.id) - 1), 0, grabObj)
         }
         if(grabObj.flipped === false) {
+<<<<<<< HEAD
           let updateHand2 = this.state.play2Hand;
           let allow2 = {id: grabObj.id, image: `./images/${item.target.id % 13 === 0 ? 13 : item.target.id % 13}.jpg`, flipped: true};
           updateHand2.splice(parseInt(item.target.className), 1, allow2);
+=======
+          let allow2 = {id: grabObj.id, image: `./images/${item.target.id % 13 === 0 ? 13 : item.target.id % 13}.jpg`, flipped: true};
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
           item.target.src = `./images/${item.target.id % 13 === 0 ? 13 : item.target.id % 13}.jpg`
           discardArray.splice((parseInt(item.target.id) - 1), 0, allow2)
           this.setState({
             beginP2Flipped: this.state.beginP2Flipped + 1,
+<<<<<<< HEAD
             discardReferenceArray: discardArray,
             play2Hand: updateHand2
           })
@@ -376,6 +578,12 @@ class App extends React.Component {
         let newObj = {id: flipDiscard.id, image: `./images/${flipDiscard.id % 13 === 0 ? 13 : flipDiscard.id % 13}.jpg`, flipped: true}
         this.setState({discard: newObj});
       } 
+=======
+            discardReferenceArray: discardArray
+          })
+        }
+      }
+>>>>>>> 201c2611134bb350b463bedb33398be037031c8e
     }
 
     let renderPlay1Hand = this.state.play1Hand.map((card1, index)=>{
