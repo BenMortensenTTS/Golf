@@ -87,6 +87,15 @@ class App extends React.Component {
         discard: discardObj,
         p1Wins: p1Wins,
         p2Wins: p2Wins,
+      }, () => {
+        if(this.state.p1Wins === null || this.state.p2Wins === null) {
+          this.setState({
+            p1Wins: 0,
+            p2Wins: 0
+          })
+          localStorage.setItem('p1Wins', 0);
+          localStorage.setItem('p2Wins', 0);
+        }
       })
     }
 
@@ -135,9 +144,7 @@ class App extends React.Component {
               localStorage.setItem('p1Wins', 0);
               this.setState({p2Wins: 0})
               this.setState({p1Wins: 0})
-            } else {
-              localStorage.setItem('p2Wins', curr);
-            }
+            } 
           })
         }
 
@@ -150,9 +157,7 @@ class App extends React.Component {
               localStorage.setItem('p2Wins', 0);
               this.setState({p1Wins: 0})
               this.setState({p2Wins: 0})
-            } else {
-              localStorage.setItem('p1Wins', curr);
-            }
+            } 
           })
         }
 
@@ -182,7 +187,7 @@ class App extends React.Component {
   }
 
   selectSwapDiscard1 = () => {
-      if(!this.state.didTakeDeck && this.state.deckObj.id === 0 && this.state.p1Turn && this.state.playing && this.state.selectIndex !== null) {
+      if(this.state.p1Turn && this.state.cardType === "card1" && !this.state.didTakeDeck && this.state.deckObj.id === 0 && this.state.playing && this.state.selectIndex !== null) {
         let play1 = this.state.play1Hand
         play1.splice(this.state.selectIndex, 1, this.state.discard)
         this.setState({
@@ -217,7 +222,7 @@ class App extends React.Component {
     }
 
     selectSwapDiscard2 = () => {
-      if(this.state.p2Turn && this.state.deckObj.id === 0 && !this.state.didTakeDeck && this.state.playing && this.state.selectIndex !== null) {
+      if(this.state.p2Turn && this.state.cardType === "card2" && this.state.deckObj.id === 0 && !this.state.didTakeDeck && this.state.playing && this.state.selectIndex !== null) {
         let play2 = this.state.play2Hand
         play2.splice(this.state.selectIndex, 1, this.state.discard)
         this.setState({
@@ -253,7 +258,7 @@ class App extends React.Component {
     }
 
     selectSwapDeck1 = () => {
-      if(this.state.p1Turn && this.state.deckObj.id !== 0 && this.state.cardType !== "deck" && this.state.playing && this.state.selectIndex !== null) {
+      if(this.state.p1Turn && this.state.cardType !== "card1" && this.state.deckObj.id !== 0 && this.state.playing && this.state.selectIndex !== null) {
         let play1 = this.state.play1Hand;
         play1.splice(this.state.selectIndex, 1, this.state.deckObj);
         this.setState({
@@ -292,7 +297,7 @@ class App extends React.Component {
     }
 
     selectSwapDeck2 = () => {
-      if(this.state.p2Turn && this.state.deckObj.id !== 0 && this.state.cardType !== "deck" && this.state.playing && this.state.selectIndex !== null) {
+      if(this.state.p2Turn && this.state.cardType === "card2" && this.state.deckObj.id !== 0 && this.state.playing && this.state.selectIndex !== null) {
         let play2 = this.state.play2Hand
         play2.splice(this.state.selectIndex, 1, this.state.deckObj)
         this.setState({
@@ -431,13 +436,13 @@ class App extends React.Component {
     }
 
     let renderPlay1Hand = this.state.play1Hand.map((card1, index)=>{
-        return <img onClick={player1Click} src={card1.image} id={card1.id} className={index} key={index+10} alt="card" />
+        return <img onClick={player1Click} src={card1.image} id={card1.id} className={index} key={index+10} alt="card1" />
     })
     let play1HandTop = renderPlay1Hand.slice(0,3);
     let play1HandBot = renderPlay1Hand.slice(3);
 
     let renderPlay2Hand = this.state.play2Hand.map((card2, index)=>{
-      return <img onClick={player2Click} src={card2.image} id={card2.id} className={index} key={index+100} alt="card"/>
+      return <img onClick={player2Click} src={card2.image} id={card2.id} className={index} key={index+100} alt="card2"/>
     })
     let play2HandTop = renderPlay2Hand.slice(0,3);
     let play2HandBot = renderPlay2Hand.slice(3);
