@@ -258,7 +258,7 @@ class App extends React.Component {
     }
 
     selectSwapDeck1 = () => {
-      if(this.state.p1Turn && this.state.cardType !== "card1" && this.state.deckObj.id !== 0 && this.state.playing && this.state.selectIndex !== null) {
+      if(this.state.p1Turn && this.state.cardType === "card1" && this.state.deckObj.id !== 0 && this.state.playing && this.state.selectIndex !== null) {
         let play1 = this.state.play1Hand;
         play1.splice(this.state.selectIndex, 1, this.state.deckObj);
         this.setState({
