@@ -137,8 +137,9 @@ class App extends React.Component {
         })
 
         if (total2 < total1) {
-          let curr = parseInt(this.state.p2Wins) + 1
-          this.setState({p2Wins: curr}, () => {
+         
+          this.setState({p2Wins: (parseInt(this.state.p2Wins) + 1)}, () => {
+            localStorage.setItem('p2Wins', this.state.p2Wins);
             if(parseInt(this.state.p2Wins) > 8) {
               localStorage.setItem('p2Wins', 0);
               localStorage.setItem('p1Wins', 0);
@@ -149,9 +150,8 @@ class App extends React.Component {
         }
 
         else if (total1 < total2) {
-          let curr = parseInt(this.state.p1Wins) + 1
-          this.setState({p1Wins: curr}, () => {
-            localStorage.setItem('p1Wins', curr);
+          this.setState({p1Wins: (parseInt(this.state.p1Wins) + 1)}, () => {
+            localStorage.setItem('p1Wins', this.state.p1Wins);
             if(parseInt(this.state.p1Wins) > 8) {
               localStorage.setItem('p1Wins', 0);
               localStorage.setItem('p2Wins', 0);
