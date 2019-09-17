@@ -10,7 +10,7 @@ class App extends React.Component {
       cardArray: [],
       discardReferenceArray: [],
       discard: {},
-      deckObj: {id: 0, image: `./images/0.jpg`},
+      deckObj: {id: 0, image: `./images/00.jpg`},
       playing: false,
       p1Turn: null,
       p2Turn: null,
@@ -262,7 +262,7 @@ class App extends React.Component {
         let play1 = this.state.play1Hand;
         play1.splice(this.state.selectIndex, 1, this.state.deckObj);
         this.setState({
-          deckObj: {id: 0, image: `./images/0.jpg`},
+          deckObj: {id: 0, image: `./images/00.jpg`},
           discard: this.state.discardReferenceArray[(this.state.itemID)-1],
           play1Hand: play1,
           p1Turn: !this.state.p1Turn,
@@ -301,7 +301,7 @@ class App extends React.Component {
         let play2 = this.state.play2Hand
         play2.splice(this.state.selectIndex, 1, this.state.deckObj)
         this.setState({
-          deckObj: {id: 0, image: `./images/0.jpg`},
+          deckObj: {id: 0, image: `./images/00.jpg`},
           play2Hand: play2,
           discard: this.state.discardReferenceArray[(this.state.itemID)-1],
           p1Turn: !this.state.p1Turn,
@@ -345,7 +345,7 @@ class App extends React.Component {
           this.setState({discard: this.state.deckObj})
           item.target.src = `./images/0.jpg`
           this.setState({
-            deckObj: {id: 0, image: `./images/0.jpg`},
+            deckObj: {id: 0, image: `./images/00.jpg`},
             p1Turn: !this.state.p1Turn,
             p2Turn: !this.state.p2Turn,
             didTakeDeck: false
